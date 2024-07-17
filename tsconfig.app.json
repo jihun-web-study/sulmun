@@ -26,7 +26,10 @@
     "baseUrl": ".",
     "paths": {
       "public/*": ["public/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@assets*": ["src/assets/*"],
+      "@components*": ["src/components/*"],
+      "@store*": ["src/store/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx"]

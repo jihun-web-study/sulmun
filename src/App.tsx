@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router/router";
 
-import Header from "@/components/layout/Header";
+import Header from "@components/layout/Header";
 
 const App = (): JSX.Element => {
   return (
