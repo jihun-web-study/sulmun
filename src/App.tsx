@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router/router";
-import FlexLayout from "@components/layout/FlexLayout";
+import FlexLayout from "@/components/layout/flexLayout/FlexLayout";
 import GridLayout from "@/components/layout/gridLayout/GridLayout";
 
 //import "./test.css";
