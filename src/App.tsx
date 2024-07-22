@@ -1,17 +1,22 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router/router";
+import FlexLayout from "@components/layout/FlexLayout";
+import GridLayout from "@/components/layout/gridLayout/GridLayout";
 
-import Header from "@components/layout/Header";
+//import "./test.css";
 
 const App = (): JSX.Element => {
   return (
     <BrowserRouter>
-      <Header />
-      <header className="bg-blue-500">헤더</header>
-      <Router />
-      <aside>사이드 1</aside>
-      <aside>사이드 2</aside>
-      <footer>푸터</footer>
+      {/* <FlexLayout>
+        <Router />
+      </FlexLayout> */}
+
+      {/*  */}
+
+      <GridLayout>
+        <Router />
+      </GridLayout>
     </BrowserRouter>
   );
 };
