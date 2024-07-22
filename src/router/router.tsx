@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { memo } from "react";
 import HomePage from "@/pages/HomePage";
-import Sample from "@/pages/Sample";
+import JotaiSample from "@/pages/JotaiSample";
 import Error from "@/pages/Error";
 
 const Router = (): JSX.Element => {
@@ -9,7 +9,7 @@ const Router = (): JSX.Element => {
     <Routes>
       <Route path="*" element={<Error />} />
       <Route path="/" element={<HomePage />} />
-      <Route path="/sample" element={<Sample />} />
+      <Route path="/sample" element={<JotaiSample />} />
     </Routes>
   );
 };
