@@ -3,8 +3,8 @@
     "version": "2.2.13",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -198.9999922513964,
-    "scrollLeft": -133.66666183206797,
+    "scrollTop": -39.99999225139641,
+    "scrollLeft": 0,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -65,7 +65,7 @@
               "fk": false,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 61.64396667480469,
+              "widthComment": 70.376953125,
               "widthDataType": 60,
               "widthDefault": 60
             }
@@ -88,7 +88,7 @@
               "fk": false,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 61.64396667480469,
+              "widthComment": 70.376953125,
               "widthDataType": 60,
               "widthDefault": 60
             }
@@ -111,7 +111,7 @@
               "fk": false,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 103.62092590332031,
+              "widthComment": 116.91796875,
               "widthDataType": 60,
               "widthDefault": 60
             }
@@ -134,7 +134,7 @@
               "fk": false,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 72.88896179199219,
+              "widthComment": 83.376953125,
               "widthDataType": 60,
               "widthDefault": 60
             }
@@ -167,7 +167,7 @@
           "active": false,
           "left": 186,
           "top": 99,
-          "zIndex": 105,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60
         },
@@ -219,7 +219,7 @@
               "fk": true,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 61.64396667480469,
+              "widthComment": 70.376953125,
               "widthDataType": 60,
               "widthDefault": 60
             }
@@ -344,9 +344,9 @@
           "active": false,
           "left": 193,
           "top": 491,
-          "zIndex": 110,
+          "zIndex": 2,
           "widthName": 60,
-          "widthComment": 61.64396667480469
+          "widthComment": 70.376953125
         },
         "visible": true
       }
@@ -390,7 +390,7 @@
           "columnIds": [
             "445e33d1-8c41-4bac-85f7-e1809de3e01b"
           ],
-          "x": 381.31046295166016,
+          "x": 387.958984375,
           "y": 270.5,
           "direction": "bottom"
         },
@@ -399,7 +399,7 @@
           "columnIds": [
             "186c8eb8-6878-4843-aa89-ebf166201a8e"
           ],
-          "x": 367.32198333740234,
+          "x": 371.6884765625,
           "y": 491,
           "direction": "top"
         },
