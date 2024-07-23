@@ -2,7 +2,17 @@
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "proj-color": "#40A1A1",
+        "proj-bg-start": "#40A1A1",
+        "proj-bg-end": "#44B6DA",
+      },
+      backgroundImage: {
+        "proj-bg-linear":
+          "linear-gradient(to right, theme(colors.proj-bg-start), theme(colors.proj-bg-end))",
+      },
+    },
   },
   plugins: [
     function ({ addUtilities }) {
