@@ -1,32 +1,25 @@
-import { Link, useLocation } from "react-router-dom";
+import NavMenu from "@/components/layout/gridLayout/NavMenu";
 
 const NavGrid = () => {
-  const location = useLocation();
-  const pathName = location.pathname;
-
-  console.log(1, pathName);
-
-  //const links = [{ text: "Home", to: "/" }];
-
-  // full: 400px
-  // pl: 120px => 30%| box: 280px => 70%
+  const menus = [
+    { text: "Sample", to: "/sample" },
+    { text: "Error", to: "/error" },
+    { text: "홈", to: "/" },
+    { text: "SignIn", to: "/auth/signin" },
+    { text: "SignUp", to: "/auth/signup" },
+    { text: "post", to: "/post/3" },
+    { text: "posting", to: "/posting" },
+  ];
 
   return (
     //xl:pl-[40%]
-    <nav className="w-full">
-      <ul className="flex flex-col gap-2 w-full xl:pl-[calc(100%/6)]">
-        <Link to={"/"} className="bg-green-200 w-full ">
-          Home
-        </Link>
-        <Link to={"/sample"} className="bg-green-200 w-full">
-          Sample
-        </Link>
-        <Link to={"/"} className="bg-green-200 w-full">
-          temp home
-        </Link>
-        <Link to={"/error"} className="bg-green-200 w-full">
-          error
-        </Link>
+    <nav className="w-full pr-[10%]">
+      <ul className="flex flex-col gap-[6px] w-full xl:pl-[calc(100%/6)]">
+        {menus.map((menu, idx) => (
+          <NavMenu key={idx} to={menu.to}>
+            {menu.text}
+          </NavMenu>
+        ))}
       </ul>
     </nav>
   );
