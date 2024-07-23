@@ -1,15 +1,47 @@
 import { Routes, Route } from "react-router-dom";
 import { memo } from "react";
+import GridLayout from "@/components/layout/gridLayout/GridLayout";
+import NotFound from "@/pages/NotFound";
+import AuthLayout from "@/components/auth/common/AuthLayout";
+import SignInPage from "@/pages/SignInPage";
+import SignUpPage from "@/pages/SignUpPage";
 import HomePage from "@/pages/HomePage";
+import PostPage from "@/pages/PostPage";
+import PostingPage from "@/pages/PostingPage";
+
+// import ProtectedRoute from "@/pages/ProtectedRoute";
 import JotaiSample from "@/pages/JotaiSample";
-import Error from "@/pages/Error";
 
 const Router = (): JSX.Element => {
   return (
     <Routes>
-      <Route path="*" element={<Error />} />
-      <Route path="/" element={<HomePage />} />
-      <Route path="/sample" element={<JotaiSample />} />
+      {/* 404 Not Found */}
+      <Route path="*" element={<NotFound />} />
+
+      {/* 로그인, 회원가입 */}
+      <Route path={"/auth"} element={<AuthLayout />}>
+        <Route path={"signin"} element={<SignInPage />} />
+        <Route path={"signup"} element={<SignUpPage />} />
+      </Route>
+
+      {/* 레이아웃 적용 페이지들 */}
+      <Route element={<GridLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sample" element={<JotaiSample />} />
+        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/posting/" element={<PostingPage />} />
+        <Route
+          path="/survey/*"
+          element={
+            <Routes>
+              <Route path="/" element={<div>survey main</div>} />
+              <Route path="/detail:id" element={<div>survey detail</div>} />
+              <Route path="/template:id" element={<div>survey template</div>} />
+            </Routes>
+          }
+        />
+        <Route path="/sample" element={<div />} />
+      </Route>
     </Routes>
   );
 };
