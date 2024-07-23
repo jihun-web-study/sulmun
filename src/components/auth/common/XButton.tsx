@@ -1,10 +1,11 @@
 import xSvg from "@/assets/svg/x.svg";
+import { Link } from "react-router-dom";
 
 const XButton = () => {
   return (
-    <button className="absolute top-5 right-5">
+    <Link to={"/"} className="absolute top-5 right-5">
       <img src={xSvg} alt="닫기버튼" />
-    </button>
+    </Link>
   );
 };
 
