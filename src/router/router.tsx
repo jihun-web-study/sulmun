@@ -4,7 +4,8 @@ import GridLayout from "@/components/layout/gridLayout/GridLayout";
 import NotFound from "@/pages/NotFound";
 import AuthLayout from "@/components/auth/common/AuthLayout";
 import SignInPage from "@/pages/SignInPage";
-import SignUpPage from "@/pages/SignUpPage";
+import SignUpInfo from "@/pages/SignUpInfo";
+import SignUpVerify from "@/pages/SignUpVerify";
 import HomePage from "@/pages/HomePage";
 import PostPage from "@/pages/PostPage";
 import PostingPage from "@/pages/PostingPage";
@@ -21,7 +22,15 @@ const Router = (): JSX.Element => {
       {/* 로그인, 회원가입 */}
       <Route path={"/auth"} element={<AuthLayout />}>
         <Route path={"signin"} element={<SignInPage />} />
-        <Route path={"signup"} element={<SignUpPage />} />
+        <Route
+          path={"signup/*"}
+          element={
+            <Routes>
+              <Route path={"/info"} element={<SignUpInfo />} />
+              <Route path={"/verify"} element={<SignUpVerify />} />
+            </Routes>
+          }
+        />
       </Route>
 
       {/* 레이아웃 적용 페이지들 */}

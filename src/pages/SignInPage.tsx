@@ -42,7 +42,7 @@ const SignInPage = () => {
       <div className="my-4">
         <span>계정이 없으신가요?</span>
         <Link
-          to={"/auth/signup"}
+          to={"/auth/signup/info"}
           className="ml-[16px] text-gray-500 font-bold leading-8 underline decoration-[2px] underline-offset-[4px]"
         >
           회원가입
