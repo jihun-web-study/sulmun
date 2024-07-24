@@ -12,7 +12,8 @@ const AuthLayout = () => {
         {lastPathName === "signup" && <BackToLogin />}
         <XButton />
         <div className="pt-10 mb-4 proj-color font-bold text-3xl">
-          SULMUN {lastPathName === "signin" ? "로그인" : "회원가입"}
+          <span className="text-proj-color">SULMUN</span>{" "}
+          {lastPathName === "signin" ? "로그인" : "회원가입"}
         </div>
 
         {/* 각 페이지 */}
