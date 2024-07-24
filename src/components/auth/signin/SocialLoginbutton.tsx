@@ -1,22 +1,33 @@
-import { Link } from "react-router-dom";
+import githubLogo from "@/assets/svg/github.svg";
+import googleLogo from "@/assets/svg/google.svg";
+import kakaoLogo from "@/assets/svg/kakao.svg";
 
 type SocialProps = {
-  to: string;
-  img: string;
-  alt: "kakao" | "google";
-  bgColor?: "FFEB3B" | "EDEDED";
+  onClick: () => void;
+  socialType: "kakao" | "google" | "github";
 };
 
-const SocialLoginbutton = ({ to, img, alt, bgColor }: SocialProps) => {
+const SocialLoginbutton = ({ onClick, socialType }: SocialProps) => {
+  const socialTypes = {
+    github: { src: githubLogo, bg: "bg-[#262626]", alt: "github" },
+    google: { src: googleLogo, bg: "bg-[#EDEDED]", alt: "google" },
+    kakao: { src: kakaoLogo, bg: "bg-[#FFEB3B]", alt: "kakao" },
+  };
+
+  const defaultOnClick = () => {
+    console.log(`${socialType} clicked`);
+  };
+
   return (
-    <Link
-      to={to}
-      className={`w-[60px] h-[50px] flex justify-center items-center ${
-        alt === "kakao" ? "bg-[#FFEB3B]" : "bg-[#EDEDED]"
-      } rounded-[10px]`}
+    <button
+      onClick={onClick || defaultOnClick}
+      className={`w-[60px] h-[50px] flex justify-center items-center ${socialTypes[socialType].bg} rounded-[10px]`}
     >
-      <img src={img} alt={`${alt} 로그인`} />
-    </Link>
+      <img
+        src={socialTypes[socialType].src}
+        alt={socialTypes[socialType].alt}
+      />
+    </button>
   );
 };
 
