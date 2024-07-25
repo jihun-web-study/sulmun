@@ -57,7 +57,7 @@ export async function signUpWithEmail({
   });
   if (error) {
     console.error("회원가입 에러:", error.message);
-    return;
+    return false;
   }
 
   alert("확인 이메일이 전송되었습니다. 이메일을 확인해주세요.");
@@ -97,4 +97,16 @@ export async function getSession() {
     data: { session },
   } = await supabase.auth.getSession();
   console.log("session: ", session);
+}
+
+export async function resendOTP(email: string) {
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email: email,
+    options: {
+      emailRedirectTo: "https://localhost:3000",
+    },
+  });
+
+  if (error) console.log(error);
 }
