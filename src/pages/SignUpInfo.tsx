@@ -14,7 +14,7 @@ const SignUpInfo = () => {
   return (
     <form
       className="w-full flex flex-col gap-3"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
 
         if (nickname === "" || email === "") {
@@ -26,8 +26,10 @@ const SignUpInfo = () => {
         } else {
           console.log("submit!");
           console.table({ nickname, email, password });
-          signUpWithEmail({ nickname, email, password });
-          navigate("/auth/signup/verify", { state: { nickname, email } });
+          const result = await signUpWithEmail({ nickname, email, password });
+          if (!result) {
+            navigate("/auth/signup/verify", { state: { nickname, email } });
+          }
         }
       }}
     >
