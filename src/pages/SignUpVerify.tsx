@@ -4,11 +4,10 @@ import { verifySignUp } from "@/supabase/utils";
 import { useLocation } from "react-router-dom";
 
 const SignUpVerify = () => {
-  const {
-    state: { nickname, email },
-  } = useLocation();
-
+  const state: { nickname: string; email: string } = useLocation().state;
   const [token, setToken] = useState("");
+
+  if (!state) return (location.href = "/");
 
   return (
     <form
@@ -16,21 +15,27 @@ const SignUpVerify = () => {
       onSubmit={(e) => {
         e.preventDefault();
         console.log("submit!");
-        console.table({ nickname, email, token });
-        if (token !== "" && token.length === 6) {
-          verifySignUp({ email, token });
+        if (state) {
+          console.table({
+            nickname: state.nickname,
+            email: state.email,
+            token,
+          });
+          if (token !== "" && token.length === 6) {
+            verifySignUp({ email: state.email, token });
+          }
         }
       }}
     >
       <div>
         <span>
-          안녕하세요 <strong>{nickname}</strong>
-          {" 😀"}
+          안녕하세요 <strong>{state.nickname || ""}</strong>
+          {"님 😀"}
         </span>
       </div>
       <div>
         <span>
-          <strong>{email}</strong>로 인증코드를 보냈습니다.
+          <strong>{state.email || ""}</strong>로 인증코드를 보냈습니다.
         </span>
       </div>
       <Input
@@ -43,7 +48,7 @@ const SignUpVerify = () => {
         type="submit"
         className="w-full py-5 text-white rounded-[10px] bg-proj-bg-linear"
       >
-        회원가입하기
+        인증하고 회원가입 완료하기
       </button>
     </form>
   );
