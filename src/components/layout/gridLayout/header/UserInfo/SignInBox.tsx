@@ -27,7 +27,7 @@ const SignInBox = ({ avartarUrl, userName }: SignInBoxProps) => {
         <div className="h-[80%] aspect-square rounded-lg bg-[#9F9F9F] border border-[#EEEEEE]" />
       )}
 
-      <span>{userName}</span>
+      <span className="text-ellipsis overflow-hidden">{userName}</span>
     </DropDown>
   );
 };

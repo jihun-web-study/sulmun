@@ -41,7 +41,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
   };
 
   return (
-    <div className="relative text-left w-4/5 max-w-[150px] h-[62.5%] rounded-xl">
+    <div className="relative text-left w-[85%] lg:w-4/5 max-w-[150px] h-[62.5%] rounded-xl">
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
@@ -54,7 +54,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
           viewBox="0 0 12 12"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`ml-2 transition-transform duration-200 ${
+          className={`transition-transform duration-200 ${
             isOpen ? "transform rotate-180" : ""
           }`}
         >
