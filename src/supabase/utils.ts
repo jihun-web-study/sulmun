@@ -1,4 +1,5 @@
 import supabase from "@/supabase/initial";
+import { Provider } from "@supabase/supabase-js";
 
 export async function signInWithEmail({
   email,
@@ -17,13 +18,18 @@ export async function signInWithEmail({
   else console.log(error.message);
 }
 
-export async function signInWithGithub() {
-  await supabase.auth.signInWithOAuth({
-    provider: "github",
-    options: {
-      redirectTo: "http://localhost:3000",
-    },
-  });
+//
+export function signInWithOAuth(provider: Provider) {
+  return async function () {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: "http://localhost:3000/",
+      },
+    });
+
+    return { data, error };
+  };
 }
 
 export async function checkLogin() {
@@ -89,7 +95,8 @@ export async function getUser() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log("user: ", user);
+
+  return user;
 }
 
 export async function getSession() {
@@ -109,4 +116,29 @@ export async function resendOTP(email: string) {
   });
 
   if (error) console.log(error);
+}
+
+export async function signOut() {
+  const { error } = await supabase.auth.signOut();
+
+  if (!error) return (location.href = "/");
+
+  return error;
+}
+
+export async function deleteAccount() {
+  try {
+    const { data, error } = await supabase.rpc("delete_user");
+
+    if (error) throw error;
+
+    if (data?.success) {
+      console.log(data.message);
+      // 로그아웃 및 추가적인 클라이언트 측 정리 작업 수행
+    } else {
+      console.error("Error deleting user:", data.error);
+    }
+  } catch (error) {
+    console.error("Error calling delete_user function:", error.message);
+  }
 }
