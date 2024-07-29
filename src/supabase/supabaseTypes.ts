@@ -70,6 +70,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      delete_user: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
       rpc_update_nickname: {
         Args: {
           new_nickname: string;

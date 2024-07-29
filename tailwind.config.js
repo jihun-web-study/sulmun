@@ -40,6 +40,9 @@ export default {
         ".children-shrink-0": {
           "& > * ": { "flex-shrink": 0 },
         },
+        ".text-shadow": {
+          "text-shadow": `-1px -1px 0 #F2F2F2, 1px -1px 0 #F2F2F2, -1px  1px 0 #F2F2F2, 1px  1px 0 #F2F2F2;`,
+        },
       };
       addUtilities(newUtilities, ["responsive"]);
     },

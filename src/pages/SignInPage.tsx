@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "@/components/auth/common/Input";
 import SocialLoginbutton from "@/components/auth/signin/SocialLoginbutton";
-import { signInWithEmail, signInWithGithub } from "@/supabase/utils";
+import { signInWithEmail, signInWithOAuth } from "@/supabase/utils";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -53,13 +53,16 @@ const SignInPage = () => {
         <div className="flex gap-3">
           <SocialLoginbutton
             socialType={"kakao"}
-            onClick={() => alert("구글 로그인은 아직 미구현입니다.")}
+            onClick={signInWithOAuth("kakao")}
           />
           <SocialLoginbutton
             socialType={"google"}
             onClick={() => alert("구글 로그인은 아직 미구현입니다.")}
           />
-          <SocialLoginbutton socialType={"github"} onClick={signInWithGithub} />
+          <SocialLoginbutton
+            socialType={"github"}
+            onClick={signInWithOAuth("github")}
+          />
         </div>
       </div>
     </>
