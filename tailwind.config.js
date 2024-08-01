@@ -5,12 +5,12 @@ export default {
     extend: {
       colors: {
         "proj-color": "#40A1A1",
+        "proj-sub-color": "#94C5C5",
         "proj-bg-start": "#40A1A1",
         "proj-bg-end": "#44B6DA",
       },
       backgroundImage: {
-        "proj-bg-linear":
-          "linear-gradient(to right, theme(colors.proj-bg-start), theme(colors.proj-bg-end))",
+        "proj-bg-linear": "linear-gradient(to right, theme(colors.proj-bg-start), theme(colors.proj-bg-end))",
       },
     },
   },
