@@ -1,13 +1,7 @@
 import supabase from "@/supabase/initial";
 import { Provider } from "@supabase/supabase-js";
 
-export async function signInWithEmail({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
+export async function signInWithEmail({ email, password }: { email: string; password: string }) {
   const { error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -24,7 +18,7 @@ export function signInWithOAuth(provider: Provider) {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: "http://localhost:3000/",
+        redirectTo: "http://localhost:3000/auth/oauth",
       },
     });
 
@@ -69,13 +63,7 @@ export async function signUpWithEmail({
   alert("확인 이메일이 전송되었습니다. 이메일을 확인해주세요.");
 }
 
-export async function verifySignUp({
-  email,
-  token,
-}: {
-  email: string;
-  token: string;
-}) {
+export async function verifySignUp({ email, token }: { email: string; token: string }) {
   const { error } = await supabase.auth.verifyOtp({
     email: email,
     token: token,
@@ -104,6 +92,8 @@ export async function getSession() {
     data: { session },
   } = await supabase.auth.getSession();
   console.log("session: ", session);
+
+  return session;
 }
 
 export async function resendOTP(email: string) {
@@ -140,5 +130,58 @@ export async function deleteAccount() {
     }
   } catch (error) {
     console.error("Error calling delete_user function:", error.message);
+  }
+}
+
+export async function fetchAllPosts() {
+  const { data, error } = await supabase.rpc("get_all_posts");
+
+  if (error) {
+    console.error("Error fetching posts:", error);
+    alert("포스트 조회 중 오류가 발생했습니다.");
+  } else {
+    console.log("All posts:", data);
+    // 데이터 처리 로직 추가
+    return data;
+  }
+}
+
+export async function fetchPostById(postId: number) {
+  const { data, error } = await supabase.rpc("get_post_by_id", { post_id: postId });
+
+  if (error) {
+    console.error("Error fetching post:", error);
+    alert("포스트 조회 중 오류가 발생했습니다.");
+  } else {
+    console.log("Post details:", data);
+    // 데이터 처리 로직 추가
+  }
+}
+
+type CreatePostTypes = {
+  title: string;
+  description: string;
+  type: "normal" | "survey";
+};
+
+export async function createPost({ title, description, type }: CreatePostTypes) {
+  const { data, error } = await supabase.rpc("create_post", { title, description, type });
+
+  if (error) {
+    let errorMessage;
+
+    // 커스텀 에러 메시지 처리
+    if (error.message.includes("required fields")) {
+      errorMessage = "모든 필드를 입력해야 합니다.";
+    } else {
+      errorMessage = "포스트 생성 중 오류가 발생했습니다.";
+    }
+
+    console.error("Error creating post:", errorMessage);
+    alert(errorMessage); // 사용자에게 에러 메시지 알림
+  } else {
+    console.log("Post created successfully:", data);
+    alert("포스트가 성공적으로 생성되었습니다!"); // 성공 메시지
+    console.log(data); // { success: true }
   }
 }
