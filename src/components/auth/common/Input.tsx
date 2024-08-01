@@ -15,6 +15,7 @@ const Input = ({ type = "text", onChange, placeholder, value }: InputProps) => {
       placeholder={placeholder}
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
+      autoComplete="off"
     />
   );
 };
