@@ -1,5 +1,6 @@
 import SurveyPost from "@/components/home/postComponents/SurveyPost";
 import NormalPost from "@/components/home/postComponents/NormalPost";
+import PostAuthor from "@/components/auth/common/PostAuthor";
 
 export type PostDataTypes = {
   post_id: number;
@@ -15,20 +16,11 @@ export type PostDataTypes = {
 const HomePostComponent = ({ postData }: { postData: PostDataTypes }) => {
   //console.log(postData);
 
-  const backgroundImageStyle = postData.avatar_url ? { backgroundImage: `url('${postData.avatar_url}')` } : undefined;
-
   return (
     <div className=" w-full h-auto flex flex-col gap-4">
       {/* 게시글 작성자 정보 */}
-      <div className="w-full h-9 flex items-center gap-2">
-        <button
-          onClick={() => console.log("clicked")}
-          className={"h-full aspect-square bg-[#D9D9D9] rounded-lg bg-center bg-no-repeat bg-cover border"}
-          style={backgroundImageStyle}
-        ></button>
-        <strong className="text-sm">{postData.user_name}</strong>
-        <span className="text-xs">{`${postData.created_at} minutes ago`}</span>
-      </div>
+      <PostAuthor avatar_url={postData.avatar_url} user_name={postData.user_name} created_at={postData.created_at} />
+
       {/* 게시글 내용물 */}
       {postData.type === "normal" ? (
         <NormalPost />
