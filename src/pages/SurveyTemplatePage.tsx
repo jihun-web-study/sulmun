@@ -1,9 +1,9 @@
-import BackButton from "@/components/common/BackButton";
+import BreadCrumb from "@/components/common/BreadCrumb";
 
 const SurveyTemplatePage = () => {
   return (
     <div className="flex flex-col">
-      <BackButton menu="home" />
+      <BreadCrumb menu="home" />
       <div>SurveyTemplatePage</div>
     </div>
   );

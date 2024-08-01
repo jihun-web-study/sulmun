@@ -1,6 +1,6 @@
 import { MENUS } from "@/utils/constants";
 
-const BackButton = ({ menu }: { menu: "home" | "survey" }) => {
+const BreadCrumb = ({ menu }: { menu: "home" | "survey" }) => {
   return (
     <div className="flex items-center gap-3">
       <button>
@@ -16,4 +16,4 @@ const BackButton = ({ menu }: { menu: "home" | "survey" }) => {
   );
 };
 
-export default BackButton;
+export default BreadCrumb;
