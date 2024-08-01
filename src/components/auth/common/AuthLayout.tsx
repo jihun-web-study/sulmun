@@ -12,8 +12,7 @@ const AuthLayout = () => {
         {lastPathName.includes("signup") && <BackToLogin />}
         <XButton />
         <div className="pt-10 mb-4 proj-color font-bold text-3xl">
-          <span className="text-proj-color">SULMUN</span>{" "}
-          {lastPathName.includes("signin") ? "로그인" : "회원가입"}
+          <span className="text-proj-color">SULMUN</span> {lastPathName.includes("signup") ? "회원가입" : "로그인"}
         </div>
 
         {/* 각 페이지 */}
