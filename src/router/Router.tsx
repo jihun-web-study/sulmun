@@ -44,25 +44,24 @@ const Router = (): JSX.Element => {
       {/* 레이아웃 적용 페이지들 */}
       <Route element={<GridLayout />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/post/:id" element={<PostPage />} />
         <Route path="/sample" element={<JotaiSample />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/post/:id" element={<PostPage />} />
           <Route path="/posting/" element={<PostingPage />} />
+          <Route
+            path="/survey/*"
+            element={
+              <Routes>
+                <Route path="/" element={<SurveyMainPage />} />
+                <Route path="/detail:id" element={<SurveyDetailPage />} />
+                <Route path="/template:id" element={<SurveyTemplatePage />} />
+              </Routes>
+            }
+          />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/sample" element={<div />} />
         </Route>
-
-        <Route
-          path="/survey/*"
-          element={
-            <Routes>
-              <Route path="/" element={<SurveyMainPage />} />
-              <Route path="/detail:id" element={<SurveyDetailPage />} />
-              <Route path="/template:id" element={<SurveyTemplatePage />} />
-            </Routes>
-          }
-        />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/sample" element={<div />} />
       </Route>
     </Routes>
   );
