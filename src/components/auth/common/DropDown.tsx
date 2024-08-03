@@ -41,7 +41,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
   };
 
   return (
-    <div className="relative text-left w-[85%] lg:w-4/5 max-w-[150px] h-[62.5%] rounded-xl">
+    <div className="relative text-left w-full lg:w-4/5 max-w-[150px] h-[62.5%] rounded-xl">
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
@@ -54,9 +54,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
           viewBox="0 0 12 12"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`transition-transform duration-200 ${
-            isOpen ? "transform rotate-180" : ""
-          }`}
+          className={`transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
         >
           <path
             d="M6.00002 8C6.20002 8 6.40002 7.9 6.50002 7.8L9.80002 4.5C10.1 4.2 10.1 3.7 9.80002 3.4C9.50002 3.1 9.00002 3.1 8.70002 3.4L6.00002 6.1L3.30002 3.4C3.00002 3.1 2.50002 3.1 2.20002 3.4C1.90002 3.7 1.90002 4.2 2.20002 4.5L5.40002 7.7C5.60002 7.9 5.80002 8 6.00002 8Z"
