@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Router from "./router/Router";
+import JotaiProvider from "@/JotaiProvider";
 
 const App = (): JSX.Element => {
   const queryClient = new QueryClient();
@@ -8,7 +9,9 @@ const App = (): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Router />
+        <JotaiProvider>
+          <Router />
+        </JotaiProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
