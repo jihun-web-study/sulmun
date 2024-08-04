@@ -12,6 +12,7 @@ const SignInBox = ({ avartarUrl, userName }: SignInBoxProps) => {
 
   const buttonList = [
     { text: "마이페이지", onclick: () => navigate("/mypage") },
+    { text: "계정 설정", onclick: () => navigate("/setting") },
     { text: "로그아웃", onclick: signOut },
   ];
 
@@ -21,13 +22,13 @@ const SignInBox = ({ avartarUrl, userName }: SignInBoxProps) => {
         <img
           src={avartarUrl || ""}
           alt="avartar"
-          className="h-[80%] aspect-square rounded-xl border-2 border-[#EEEEEE]"
+          className="h-9 aspect-square aspect-square rounded-xl border-2 border-[#EEEEEE]"
         />
       ) : (
-        <div className="h-[80%] aspect-square rounded-lg bg-[#9F9F9F] border border-[#EEEEEE]" />
+        <div className="h-6 xl:h-9 aspect-square rounded-lg bg-[#9F9F9F] border border-[#EEEEEE]" />
       )}
 
-      <span className="text-base text-ellipsis overflow-hidden">{userName}</span>
+      <div className="flex items-center text-xs whitespace-nowrap text-ellipsis overflow-hidden">{userName}</div>
     </DropDown>
   );
 };
