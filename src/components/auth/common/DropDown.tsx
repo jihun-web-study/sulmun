@@ -45,7 +45,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
-        className="flex justify-between items-center w-full h-full px-2 text-sm font-medium text-[#666666] bg-white border border-[#EEEEEE] rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="flex gap-1 justify-between items-center w-full h-full px-1 text-sm font-medium text-[#666666] bg-white border border-[#EEEEEE] rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
       >
         {children}
         <svg
@@ -70,7 +70,7 @@ const DropDown = ({ children, buttonList }: DropDownProps) => {
       >
         <div
           ref={dropdownRef}
-          className="bg-red-400 py-1 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="bg-white py-1 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           {buttonList?.map(({ text, onclick }, idx) => (
             <DropDownListButton
