@@ -117,20 +117,23 @@ export async function signOut() {
 }
 
 export async function deleteAccount() {
-  try {
-    const { data, error } = await supabase.rpc("delete_user");
+  const response = await supabase.auth.getUser();
+  const [userData, getUserError] = [response.data.user, response.error];
 
-    if (error) throw error;
+  console.table(userData, getUserError);
 
-    if (data?.success) {
-      console.log(data.message);
-      // 로그아웃 및 추가적인 클라이언트 측 정리 작업 수행
-    } else {
-      console.error("Error deleting user:", data.error);
-    }
-  } catch (error) {
-    console.error("Error calling delete_user function:", error.message);
+  const { data, error } = await supabase.rpc("deleteUser");
+
+  console.log(data, error);
+
+  if (error) {
+    console.error("Error deleting user:", error);
+    return;
   }
+
+  console.log("User account deleted successfully:", data);
+  localStorage.removeItem("sulmun_auth_key");
+  location.href = "/";
 }
 
 export async function fetchAllPosts() {
