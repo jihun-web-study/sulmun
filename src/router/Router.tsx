@@ -10,13 +10,14 @@ import SignUpVerify from "@/pages/SignUpVerify";
 import OAuthPage from "@/pages/OAuthPage";
 import HomePage from "@/pages/HomePage";
 import PostPage from "@/pages/PostPage";
+import ProtectedRoute from "@/router/ProtectedRoute";
 import PostingPage from "@/pages/PostingPage";
 import SurveyMainPage from "@/pages/SurveyMainPage";
 import SurveyDetailPage from "@/pages/SurveyDetailPage";
 import SurveyTemplatePage from "@/pages/SurveyTemplatePage";
 import MyPage from "@/pages/MyPage";
+import SettingPage from "@/pages/SettingPage";
 
-import ProtectedRoute from "@/router/ProtectedRoute";
 import JotaiSample from "@/pages/JotaiSample";
 
 const Router = (): JSX.Element => {
@@ -35,6 +36,7 @@ const Router = (): JSX.Element => {
             <Routes>
               <Route path={"/info"} element={<SignUpInfo />} />
               <Route path={"/verify"} element={<SignUpVerify />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           }
         />
@@ -48,19 +50,22 @@ const Router = (): JSX.Element => {
         <Route path="/sample" element={<JotaiSample />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/posting/" element={<PostingPage />} />
+          <Route path="/posting" element={<PostingPage />} />
           <Route
             path="/survey/*"
             element={
               <Routes>
                 <Route path="/" element={<SurveyMainPage />} />
-                <Route path="/detail:id" element={<SurveyDetailPage />} />
-                <Route path="/template:id" element={<SurveyTemplatePage />} />
+                <Route path=":id" element={<div>id</div>} />
+                <Route path="detail/:id" element={<SurveyDetailPage />} />
+                <Route path="template/:id" element={<SurveyTemplatePage />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             }
           />
+
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/sample" element={<div />} />
+          <Route path="/setting" element={<SettingPage />} />
         </Route>
       </Route>
     </Routes>
