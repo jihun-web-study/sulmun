@@ -10,15 +10,17 @@ type SurveyTypePostProps = {
 const SurveyTypePost = ({ title, description, image, comment_count }: SurveyTypePostProps) => {
   const backgroundImageStyle = image ? { backgroundImage: `url('${image}')` } : undefined;
 
+  const tempSurveyID = 1;
+
   return (
     <div className="w-full flex flex-col gap-4">
-      {image && <div className="w-full h-80 bg-center bg-no-repeat bg-cover" style={backgroundImageStyle} />}
+      {image && <div className="w-full h-72 bg-center bg-no-repeat bg-cover" style={backgroundImageStyle} />}
 
       <div className="bg-white w-full h-auto px-6 py-5 flex flex-col rounded-md border border-gray-300">
         <div className="font-semibold text-lg mb-1">{title}</div>
         <div className="font-semibold text-sm">{description}</div>
         <Link
-          to="/"
+          to={`/survey/${tempSurveyID}`}
           className="w-32 h-8 my-4 flex justify-center items-center rounded-md text-white bg-proj-bg-linear text-sm"
         >
           설문지 작성하기
