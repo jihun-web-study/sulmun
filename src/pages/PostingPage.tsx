@@ -1,7 +1,8 @@
 //import { createPost } from "@/supabase/utils";
 import BreadCrumb from "@/components/common/BreadCrumb";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
+import { uploadImage } from "@/supabase/utils";
 
 const PostingPage = () => {
   /*   const [title1, description1] = ["title1", "description1"];
@@ -27,7 +28,9 @@ const PostingPage = () => {
   const [currentType, setCurrentType] = useState<"normal" | "survey">("normal");
   const [isSurveySelectOpen, setIsSurveySelectOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [image, setImage] = useState<string | ArrayBuffer | null>(null); // 선택된 이미지를 저장할 state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // 업로드한 이미지 미리보기
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleButtonClick = () => {
     // file input 요소를 클릭하여 파일 선택 다이얼로그 열기
@@ -35,17 +38,34 @@ const PostingPage = () => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let file = null;
-    if (event.target.files) file = event.target.files[0]; // 선택된 파일 가져오기
+    const uploadFiles = event.target.files;
+    if (uploadFiles) {
+      const file = uploadFiles[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // 파일을 읽은 후 이미지 상태 업데이트
-      };
-      reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+      if (file.type.substring(0, 5) === "image") {
+        setSelectedFile(file);
+        // 업로드한 이미지 렌더링
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+          setPreviewUrl(null); //
+        }
+
+        const newPreviewUrl = URL.createObjectURL(file);
+        setPreviewUrl(newPreviewUrl);
+      } else {
+        alert("이미지 파일만 업로드하세요!!!");
+      }
     }
   };
+
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 URL 객체를 해제합니다.
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const test = [1, 2, 3, 4, 5, 6];
 
@@ -53,15 +73,26 @@ const PostingPage = () => {
     return (
       <article className="w-full flex flex-col md:flex-row gap-[10%]">
         <div className="flex flex-col gap-3">
-          <strong>대표이미지 업로드</strong>
+          <strong onClick={() => console.log(2, previewUrl, typeof previewUrl)}>대표이미지 업로드</strong>
           <button
             onClick={handleButtonClick}
             className="w-52 h-28 flex justify-center items-center rounded-md border border-[#EEEEEE]"
           >
-            {image && typeof image === "string" ? (
-              <img src={image} alt="project image" className="h-full" />
+            {previewUrl && typeof previewUrl === "string" ? (
+              <img src={previewUrl} alt="project image" className="h-full" />
             ) : (
-              "파일 업로드"
+              <div className="flex items-center gap-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4 17V19C4 19.5304 4.21071 20.0391 4.58579 20.4142C4.96086 20.7893 5.46957 21 6 21H18C18.5304 21 19.0391 20.7893 19.4142 20.4142C19.7893 20.0391 20 19.5304 20 19V17M7 9L12 4M12 4L17 9M12 4V16"
+                    stroke="#333333"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <strong className="mt-[2px]">파일 업로드</strong>
+              </div>
             )}
           </button>
           <input
@@ -130,8 +161,8 @@ const PostingPage = () => {
               onClick={() => {
                 if (currentType === "survey") setCurrentType("normal");
               }}
-              className={`w-32 h-8 border rounded-md ${
-                currentType === "normal" ? "border-proj-color" : "border-[#999999"
+              className={`w-32 h-8 border rounded-md hover:border-proj-color ${
+                currentType === "normal" && "border-proj-color"
               }`}
             >
               일반
@@ -140,11 +171,26 @@ const PostingPage = () => {
               onClick={() => {
                 if (currentType === "normal") setCurrentType("survey");
               }}
-              className={`w-32 h-8 ml-3 border rounded-md ${
-                currentType === "survey" ? "border-proj-color" : "border-[#999999"
+              className={`w-32 h-8 ml-3 border rounded-md hover:border-proj-color ${
+                currentType === "survey" && "border-proj-color"
               }`}
             >
               설문
+            </button>
+
+            {/*  */}
+            <button
+              onClick={async () => await uploadImage({ fileName: "test1", imageFile: selectedFile })}
+              className={`w-32 h-8 ml-3 border rounded-md border-red-400 hover:border-proj-color`}
+            >
+              이미지 확인
+            </button>
+            <button
+              onClick={() =>
+                console.log(`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/${"test"}`)
+              }
+            >
+              asdsa
             </button>
           </div>
         </article>

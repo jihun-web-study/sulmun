@@ -188,3 +188,24 @@ export async function createPost({ title, description, type }: CreatePostTypes) 
     console.log(data); // { success: true }
   }
 }
+
+export async function uploadImage({ fileName, imageFile }) {
+  try {
+    const { data, error } = await supabase.storage
+      .from("images") // 'images'는 Supabase의 버킷 이름입니다. 필요에 따라 변경하세요.
+      .upload(fileName, imageFile);
+
+    if (error) throw error;
+
+    // 업로드된 이미지의 공개 URL 가져오기
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("images").getPublicUrl(fileName);
+
+    console.log(data, publicUrl);
+
+    return { data, publicUrl };
+  } catch (error) {
+    console.error("Error uploading image: ", error.message);
+  }
+}
