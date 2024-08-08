@@ -1,18 +1,18 @@
-const AsideUserInfo = () => {
-  const userName = "Jihun";
+import { userInfoAtom } from "@/store/userStore";
+import { useAtomValue } from "jotai";
+import { signOut } from "@/supabase/utils";
 
-  const onClick = () => {
-    console.log("clicked");
-  };
+const AsideUserInfo = () => {
+  const userInfo = useAtomValue(userInfoAtom);
 
   return (
     <section className="w-full h-auto flex flex-col gap-3">
       <strong className="text-base">내 정보</strong>
       <div className="w-full h-auto flex justify-between px-2 xl:px-4 py-4  rounded-lg bg-[#94C5C5] text-white text-sm">
         <span>
-          <strong>{userName}</strong>님
+          <strong>{userInfo?.user_name}</strong>님
         </span>
-        <button onClick={onClick} className="font-normal underline decoration-[1px] underline-offset-[3px]">
+        <button onClick={signOut} className="font-normal underline decoration-[1px] underline-offset-[3px]">
           로그아웃
         </button>
       </div>

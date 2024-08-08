@@ -7,8 +7,6 @@ import { userInfoAtom } from "@/store/userStore";
 const UserInfo = () => {
   const userInfo = useAtomValue(userInfoAtom);
 
-  console.log("userInfo: ", userInfo);
-
   return (
     <div className="xl:pr-[60px] h-[80px] flex items-center justify-end pr-4">
       <div className="w-[90%] h-full flex items-center">
