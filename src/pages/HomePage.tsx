@@ -1,7 +1,7 @@
 import { useState } from "react";
 import HomePostingButton from "@/components/home/HomePostingButton";
 import HomePostComponent from "@/components/home/HomePostComponent";
-import useGetPostByFilter from "@/store/useGetPostByFilter";
+import useGetPostByFilter from "@/hooks/useGetPostByFilter";
 import { PostDataTypes } from "@/components/home/HomePostComponent";
 
 const HomePage = () => {
