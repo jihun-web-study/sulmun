@@ -1,32 +1,46 @@
-//import { useAtomValue } from "jotai";
-//import { countryAtom } from "@/store/sample";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HomePostingButton from "@/components/home/HomePostingButton";
 import HomePostComponent from "@/components/home/HomePostComponent";
-import { fetchAllPosts } from "@/supabase/utils";
-
-import { samplePost } from "@/store/sample";
-import { Json } from "@/supabase/supabaseTypes";
+import useGetPostByFilter from "@/store/useGetPostByFilter";
+import { PostDataTypes } from "@/components/home/HomePostComponent";
 
 const HomePage = () => {
-  const [allPosts, setAllPosts] = useState<Json>([]);
-  //const country = useAtomValue(countryAtom);
-
-  useEffect(() => {
-    (async function getPosts() {
-      const data = await fetchAllPosts();
-
-      if (data) setAllPosts(data);
-      console.log(allPosts);
-    })();
-  }, []);
+  const [typeFilter, setTypeFilter] = useState<"all" | "normal" | "survey">("all");
+  // 페이지네이션도 추가해야함
+  const { allPosts } = useGetPostByFilter({ filterType: typeFilter, pageNumber: 1, pageSize: 10 });
 
   return (
     <div className="flex flex-col gap-6">
-      <HomePostingButton />
+      <div className="flex gap-1">
+        <button
+          onClick={() => setTypeFilter("all")}
+          className={`type w-12 h-[44px] rounded-md border ${
+            typeFilter === "all" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          }`}
+        >
+          전부
+        </button>
+        <button
+          onClick={() => setTypeFilter("normal")}
+          className={`type w-12 h-[44px] rounded-md border ${
+            typeFilter === "normal" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          }`}
+        >
+          일반
+        </button>
+        <button
+          onClick={() => setTypeFilter("survey")}
+          className={`type w-12 h-[44px] rounded-md border ${
+            typeFilter === "survey" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          }`}
+        >
+          설문
+        </button>
+        <HomePostingButton />
+      </div>
 
-      {samplePost.map((data) => (
-        <HomePostComponent key={data.post_id} postData={data} />
+      {allPosts?.map((data) => (
+        <HomePostComponent key={data.id} postData={data} />
       ))}
     </div>
   );

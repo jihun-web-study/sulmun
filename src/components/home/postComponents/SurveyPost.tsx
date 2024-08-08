@@ -1,14 +1,20 @@
+import { UUID } from "crypto";
+import { useNavigate } from "react-router-dom";
+
 type SurveyPostProps = {
+  postID: UUID;
   title: string;
   description: string;
   image: string | undefined;
 };
 
-const SurveyPost = ({ title = "", description = "", image }: SurveyPostProps) => {
+const SurveyPost = ({ postID, title = "", description = "", image }: SurveyPostProps) => {
+  const navigate = useNavigate();
   const backgroundImageStyle = image ? { backgroundImage: `url('${image}')` } : undefined;
 
   return (
     <button
+      onClick={() => navigate(`/post/${postID}`)}
       className={`relative w-full h-72 flex items-end p-4 bg-center bg-no-repeat bg-[cover] rounded-lg`}
       style={backgroundImageStyle}
     >

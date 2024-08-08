@@ -1,31 +1,45 @@
 import SurveyPost from "@/components/home/postComponents/SurveyPost";
 import NormalPost from "@/components/home/postComponents/NormalPost";
 import PostAuthor from "@/components/auth/common/PostAuthor";
+import { UUID } from "crypto";
 
 export type PostDataTypes = {
-  post_id: number;
-  type: "normal" | "survey";
+  id: UUID;
+  comment_count: string;
+  post_type: "normal" | "survey";
   title: string;
-  image: string | undefined;
-  description: string;
+  post_image: string | undefined;
+  content: string;
   user_name: string;
   avatar_url: string | undefined;
-  created_at: string;
+  updated_at: string;
 };
 
 const HomePostComponent = ({ postData }: { postData: PostDataTypes }) => {
-  //console.log(postData);
-
   return (
     <div className=" w-full h-auto flex flex-col gap-4">
       {/* 게시글 작성자 정보 */}
-      <PostAuthor avatar_url={postData.avatar_url} user_name={postData.user_name} created_at={postData.created_at} />
+      <PostAuthor
+        avatar_url={postData.avatar_url ?? undefined}
+        user_name={postData.user_name}
+        updated_at={postData.updated_at}
+      />
 
       {/* 게시글 내용물 */}
-      {postData.type === "normal" ? (
-        <NormalPost />
+      {postData.post_type === "normal" ? (
+        <NormalPost
+          postID={postData.id}
+          title={postData.title}
+          description={postData.content}
+          commentCount={postData.comment_count}
+        />
       ) : (
-        <SurveyPost title={postData.title} description={postData.description} image={postData.image} />
+        <SurveyPost
+          postID={postData.id}
+          title={postData.title}
+          description={postData.content}
+          image={postData.post_image}
+        />
       )}
     </div>
   );

@@ -22,7 +22,7 @@ const PostAuthor = ({ avatar_url = undefined, user_name = "", updated_at = "" }:
     if (differenceInDays < 1) setAgo("방금전");
     else if (differenceInDays < 60) setAgo(`${Math.trunc(differenceInDays)}분전`);
     else setAgo(`${Math.trunc(differenceInDays / 60)}시간전`);
-  }, []);
+  }, [updated_at]);
 
   return (
     <div className="w-full h-9 flex items-center gap-2">
