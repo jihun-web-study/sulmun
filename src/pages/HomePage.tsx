@@ -12,31 +12,31 @@ const HomePage = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex gap-1">
+        <HomePostingButton />
         <button
           onClick={() => setTypeFilter("all")}
-          className={`type w-12 h-[44px] rounded-md border ${
-            typeFilter === "all" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          className={`type ml-4 w-16 h-[44px] rounded-md border ${
+            typeFilter === "all" ? "bg-proj-sub-color text-white" : "bg-white border-gray-300"
           }`}
         >
           전부
         </button>
         <button
           onClick={() => setTypeFilter("normal")}
-          className={`type w-12 h-[44px] rounded-md border ${
-            typeFilter === "normal" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          className={`type ml-2 w-16 h-[44px] rounded-md border ${
+            typeFilter === "normal" ? "bg-proj-sub-color text-white" : "bg-white border-gray-300"
           }`}
         >
           일반
         </button>
         <button
           onClick={() => setTypeFilter("survey")}
-          className={`type w-12 h-[44px] rounded-md border ${
-            typeFilter === "survey" ? "bg-proj-sub-color text-white" : "bg-white border-gray-500"
+          className={`type ml-2 w-16 h-[44px] rounded-md border ${
+            typeFilter === "survey" ? "bg-proj-sub-color text-white" : "bg-white border-gray-300"
           }`}
         >
           설문
         </button>
-        <HomePostingButton />
       </div>
 
       {allPosts?.map((data) => (
