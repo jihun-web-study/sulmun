@@ -44,23 +44,26 @@ export async function signUpWithEmail({
   password: string;
   nickname: string;
 }) {
-  const { error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      emailRedirectTo: "http://locahost:3000/",
-      data: {
-        nickname: nickname,
-        avartar_url: null,
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        emailRedirectTo: "http://locahost:3000/",
+        data: {
+          user_name: nickname,
+          avartar_url: null,
+        },
       },
-    },
-  });
-  if (error) {
-    console.error("회원가입 에러:", error.message);
-    return false;
-  }
+    });
 
-  alert("확인 이메일이 전송되었습니다. 이메일을 확인해주세요.");
+    if (error) throw error;
+
+    console.log("회원가입 성공!", data);
+    alert("확인 이메일이 전송되었습니다. 이메일을 확인해주세요.");
+  } catch (error) {
+    console.error("회원가입 에러:", error?.message);
+  }
 }
 
 export async function verifySignUp({ email, token }: { email: string; token: string }) {
@@ -117,12 +120,7 @@ export async function signOut() {
 }
 
 export async function deleteAccount() {
-  const response = await supabase.auth.getUser();
-  const [userData, getUserError] = [response.data.user, response.error];
-
-  console.table(userData, getUserError);
-
-  const { data, error } = await supabase.rpc("deleteUser");
+  const { data, error } = await supabase.rpc("delete_account");
 
   console.log(data, error);
 
@@ -134,19 +132,6 @@ export async function deleteAccount() {
   console.log("User account deleted successfully:", data);
   localStorage.removeItem("sulmun_auth_key");
   location.href = "/";
-}
-
-export async function fetchAllPosts() {
-  const { data, error } = await supabase.rpc("get_all_posts");
-
-  if (error) {
-    console.error("Error fetching posts:", error);
-    alert("포스트 조회 중 오류가 발생했습니다.");
-  } else {
-    console.log("All posts:", data);
-    // 데이터 처리 로직 추가
-    return data;
-  }
 }
 
 export async function fetchPostById(postId: number) {
@@ -167,6 +152,7 @@ type CreatePostTypes = {
   type: "normal" | "survey";
 };
 
+// 포스팅 1
 export async function createPost({ title, description, type }: CreatePostTypes) {
   const { data, error } = await supabase.rpc("create_post", { title, description, type });
 
@@ -207,5 +193,97 @@ export async function uploadImage({ fileName, imageFile }) {
     return { data, publicUrl };
   } catch (error) {
     console.error("Error uploading image: ", error.message);
+  }
+}
+
+// 포스팅 2
+export async function posting({ post_type, title, content }) {
+  try {
+    const { error } = await supabase.from("post").insert({ post_type, title, content });
+
+    if (error) throw error;
+
+    console.log("포스팅 성공!");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 포스트 총 개수
+export async function getPostTotalCount() {
+  try {
+    const { count, error } = await supabase.from("post").select("*", { count: "exact", head: true });
+
+    if (error) throw error;
+
+    console.log(`count 페칭 성공!`, count);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getFilteredPostsByRange({ filterType, pageNumber, pageSize }) {
+  /*
+  filter_type: 'all' | 'normal' | 'survey';
+  page_number: 1부터 시작;
+  page_size: number;
+*/
+  try {
+    const { data, error } = await supabase.rpc("get_filtered_posts_by_limit", {
+      filter_type: filterType,
+      page_number: pageNumber,
+      page_size: pageSize,
+    });
+
+    if (error) throw error;
+
+    console.log(`부분 페칭 성공!`, data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPostById(postId) {
+  try {
+    const { data, error } = await supabase.rpc("get_post_by_post_id", { post_id: postId });
+
+    if (error) throw error;
+
+    console.log(`id로 포스트 페칭 성공!`, data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateUserInfo(username) {
+  try {
+    const { data: updateData, error: updateError } = await supabase.auth.updateUser({ data: { user_name: username } });
+
+    if (updateError) throw updateError;
+
+    console.log(`정보수정 성공`, updateData);
+
+    location.reload();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function addComment({ postId, comment }) {
+  try {
+    const { data, error } = await supabase.rpc("add_comment", {
+      post_id: postId, // 댓글을 달 게시물의 ID
+      comment_text: comment, // 작성할 댓글
+    });
+
+    if (error) throw error;
+
+    console.log(`댓글달기 성공`, data);
+
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 }
