@@ -5,7 +5,7 @@ const BreadCrumb = ({ menu }: { menu: "home" | "survey" }) => {
   const navigate = useNavigate();
   const route = {
     home: "/",
-    survey: "survey",
+    survey: "/survey",
   };
 
   return (
