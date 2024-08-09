@@ -10,7 +10,7 @@ type InputProps = {
 const Input = ({ type = "text", onChange, placeholder, value }: InputProps) => {
   return (
     <input
-      className="w-full h-[50px] border-solid border-[1px] rounded-[10px] pl-[16px]"
+      className="w-full h-[50px] border-solid border-[1px] rounded-lg pl-[16px]"
       type={type}
       placeholder={placeholder}
       value={value || ""}
