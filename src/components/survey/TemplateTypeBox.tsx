@@ -39,7 +39,12 @@ const TemplateTypeBox = ({
           className="flex-grow mr-2 p-2 text-xl bg-[#F6F6F6] border-b border-[#5B5B5B]"
         />
 
-        <ToggleButton onClick={() => toggleMode(item.id)} initialValue={"주관식"} toggleValue={"객관식"} />
+        <ToggleButton
+          onClick={() => toggleMode(item.id)}
+          initialToggle={item.type === "choice"}
+          initialValue={"주관식"}
+          toggleValue={"객관식"}
+        />
       </div>
 
       {item.type === "choice" && (

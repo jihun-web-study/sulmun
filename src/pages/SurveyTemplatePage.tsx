@@ -22,15 +22,13 @@ const SurveyTemplatePage = () => {
   useEffect(() => {
     // DB에서 가져왔다고 가정
     const dummyFetchData: ListItem[] = [
-      { id: 1, title: "1", type: "essay", options: [{ option_number: 1, option: "1" }] },
+      { id: 1, title: "1", type: "choice", options: [{ option_number: 1, option: "1" }] },
       { id: 2, title: "2", type: "essay", options: [{ option_number: 1, option: "1" }] },
       { id: 3, title: "3", type: "choice", options: [{ option_number: 1, option: "1" }] },
-      { id: 4, title: "4", type: "choice", options: [{ option_number: 1, option: "1" }] },
+      { id: 4, title: "4", type: "essay", options: [{ option_number: 1, option: "1" }] },
     ];
 
     if (mode === "alter") setItems(dummyFetchData);
-
-    console.log(mode);
   }, [mode, setItems]);
 
   return (

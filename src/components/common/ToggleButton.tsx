@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ToggleButtonProps = {
   onClick: () => void;
   initialValue: string;
   toggleValue: string;
+  initialToggle: boolean;
 };
 
-const ToggleButton = ({ onClick, initialValue, toggleValue }: ToggleButtonProps) => {
-  const [isToggled, setIsToggled] = useState(false);
+const ToggleButton = ({ onClick, initialToggle = false, initialValue, toggleValue }: ToggleButtonProps) => {
+  const [isToggled, setIsToggled] = useState(initialToggle);
+
+  useEffect(() => {
+    setIsToggled(initialToggle);
+  }, [initialToggle]);
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
