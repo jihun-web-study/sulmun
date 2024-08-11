@@ -147,40 +147,9 @@ export async function fetchPostById(postId: number) {
   }
 }
 
-type CreatePostTypes = {
-  title: string;
-  description: string;
-  type: "normal" | "survey";
-};
-
-// 포스팅 1
-export async function createPost({ title, description, type }: CreatePostTypes) {
-  const { data, error } = await supabase.rpc("create_post", { title, description, type });
-
-  if (error) {
-    let errorMessage;
-
-    // 커스텀 에러 메시지 처리
-    if (error.message.includes("required fields")) {
-      errorMessage = "모든 필드를 입력해야 합니다.";
-    } else {
-      errorMessage = "포스트 생성 중 오류가 발생했습니다.";
-    }
-
-    console.error("Error creating post:", errorMessage);
-    alert(errorMessage); // 사용자에게 에러 메시지 알림
-  } else {
-    console.log("Post created successfully:", data);
-    alert("포스트가 성공적으로 생성되었습니다!"); // 성공 메시지
-    console.log(data); // { success: true }
-  }
-}
-
-export async function uploadImage({ fileName, imageFile }) {
+export async function uploadImage({ fileName, imageFile }: { fileName: string; imageFile: File }) {
   try {
-    const { data, error } = await supabase.storage
-      .from("images") // 'images'는 Supabase의 버킷 이름입니다. 필요에 따라 변경하세요.
-      .upload(fileName, imageFile);
+    const { data, error } = await supabase.storage.from("images").upload(fileName, imageFile);
 
     if (error) throw error;
 
@@ -189,22 +158,55 @@ export async function uploadImage({ fileName, imageFile }) {
       data: { publicUrl },
     } = supabase.storage.from("images").getPublicUrl(fileName);
 
-    console.log(data, publicUrl);
-
     return { data, publicUrl };
   } catch (error) {
     console.error("Error uploading image: ", error.message);
   }
 }
 
-// 포스팅 2
-export async function posting({ post_type, title, content }) {
+export type PostingTypes = {
+  title: string;
+  content: string;
+  postType: "normal" | "survey";
+  postImage: string | null;
+};
+
+// rpc 포스팅
+export async function posting_rpc({ postType, title, content, postImage }: PostingTypes) {
   try {
-    const { error } = await supabase.from("post").insert({ post_type, title, content });
+    const { data, error } = await supabase.rpc("create_post", {
+      p_post_type: postType,
+      p_title: title,
+      p_content: content,
+      p_post_image: postImage,
+    });
 
     if (error) throw error;
 
     console.log("포스팅 성공!");
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 포스팅 2
+export async function posting({ postType, title, content, postImage }: PostingTypes) {
+  try {
+    const { data, error: getUserError } = await supabase.auth.getUser();
+
+    if (getUserError) throw getUserError;
+
+    console.log(data);
+
+    const { data: postData, error } = await supabase
+      .from("post")
+      .insert({ post_type: postType, title, content, user_id: data.user.id, post_image: postImage })
+      .select();
+
+    if (error) throw error;
+
+    return postData;
   } catch (error) {
     console.log(error);
   }
@@ -284,6 +286,46 @@ export async function addComment({ postId, comment }) {
     console.log(`댓글달기 성공`, data);
 
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUserid() {
+  const { data, error: getUserError } = await supabase.auth.getUser();
+
+  if (getUserError) throw getUserError;
+
+  return data.user.id;
+}
+
+export async function getMySurveyForm() {
+  try {
+    const userId = await getUserid();
+
+    const { data: surveyData, error: surveyError } = await supabase
+      .from("survey_form")
+      .select("*")
+      .eq("user_id", userId);
+
+    if (surveyError) throw surveyError;
+
+    return surveyData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getMyQuestionForm(surveyId) {
+  try {
+    const { data: questionData, error: questionError } = await supabase
+      .from("question_form")
+      .select("*")
+      .eq("survey_id", Number(surveyId));
+
+    if (questionError) throw questionError;
+
+    return questionData;
   } catch (error) {
     console.log(error);
   }
