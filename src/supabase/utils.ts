@@ -330,3 +330,29 @@ export async function getMyQuestionForm(surveyId) {
     console.log(error);
   }
 }
+
+export async function add_Comment_test() {
+  try {
+    const post_id = "4f5283c9-0c07-4889-b124-a7571a9adb9c";
+
+    const data = await supabase.rpc("add_comment", { post_id, comment: "id 등록테스트" }).select();
+
+    if (error) throw error;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function delete_Comment_test(commentId: number) {
+  try {
+    const { data, error } = await supabase.rpc("delete_comment", { comment_id: commentId });
+
+    if (error) throw error;
+
+    return data;
+  } catch (error) {
+    console.log("Comment deleted successfully:", error);
+  }
+}
