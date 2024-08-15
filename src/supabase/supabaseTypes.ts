@@ -341,7 +341,7 @@ export type Database = {
       add_comment: {
         Args: {
           post_id: string;
-          comment_text: string;
+          comment: string;
         };
         Returns: undefined;
       };

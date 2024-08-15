@@ -1,12 +1,8 @@
-import { addComment } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { UUID } from "crypto";
 import { useState } from "react";
 
-type WriteCommentProps = {
-  post_id: UUID;
-};
-
-const WriteComment = ({ post_id }: { post_id: WriteCommentProps }) => {
+const WriteComment = ({ post_id }: { post_id: UUID }) => {
   const [myComment, setMyComment] = useState("");
 
   return (
@@ -22,7 +18,7 @@ const WriteComment = ({ post_id }: { post_id: WriteCommentProps }) => {
       <button
         onClick={async () => {
           if (myComment !== "") {
-            const result = await addComment({ postId: post_id, comment: myComment });
+            const result = await api.post.addComment({ postId: post_id, comment: myComment });
             console.log(result);
             location.reload();
           }

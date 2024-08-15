@@ -1,36 +1,22 @@
-//import { createPost } from "@/supabase/utils";
 import BreadCrumb from "@/components/common/BreadCrumb";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-import { uploadImage } from "@/supabase/utils";
+import { useNavigate } from "react-router-dom";
+import { api } from "@/supabase/utils";
 
 const PostingPage = () => {
-  /*   const [title1, description1] = ["title1", "description1"];
-  const [title2, description2] = ["title2", "description2"];
-
-  const TestCreatePost = () => {
-    const onClickHandeler1 = async () => {
-      await createPost({ title: title1, description: description1, type: "normal" });
-    };
-
-    const onClickHandeler2 = async () => {
-      await createPost({ title: title2, description: description2, type: "survey" });
-    };
-
-    return (
-      <>
-        <button onClick={onClickHandeler1}>test1</button>
-        <button onClick={onClickHandeler2}>test2</button>
-      </>
-    );
-  }; */
-
+  const navigate = useNavigate();
   const [currentType, setCurrentType] = useState<"normal" | "survey">("normal");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [surveyForm, setSurveyForm] = useState(Number);
   const [isSurveySelectOpen, setIsSurveySelectOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // 업로드한 이미지 미리보기
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const [mySurveyForm, setMySurveyForm] = useState<any>(null);
 
   const handleButtonClick = () => {
     // file input 요소를 클릭하여 파일 선택 다이얼로그 열기
@@ -67,7 +53,57 @@ const PostingPage = () => {
     };
   }, [previewUrl]);
 
-  const test = [1, 2, 3, 4, 5, 6];
+  useEffect(() => {
+    (async function () {
+      const result = await api.survey.getMySurveyForm();
+      setMySurveyForm(result);
+    })();
+  }, []);
+
+  function generateRandomFileName() {
+    let result = "";
+    const length = 8;
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return result;
+  }
+
+  const onClickPosting = async () => {
+    let post: PostingTypes = { title: "", content: "", postType: "normal", postImage: "" };
+
+    if (currentType === "survey") {
+      if (!selectedFile || !surveyForm) {
+        alert("이미지또는 설문지를 추가해주세요.");
+      } else {
+        console.log(selectedFile.name);
+
+        const randomFileName = generateRandomFileName();
+
+        const { data, publicUrl } = await api.post.uploadImage({
+          fileName: `${randomFileName}`,
+          imageFile: selectedFile,
+        });
+
+        const result = await api.post.posting({ postType: "survey", title, content, postImage: publicUrl });
+
+        if (!result) return new Error("포스팅 실패!");
+
+        console.log("post_id: ", result[0].id);
+      }
+    } else {
+      post = { postType: "normal", title, content, postImage: null };
+    }
+
+    const result = await api.post.posting(post);
+
+    if (!result) return new Error("포스팅 실패!");
+
+    navigate("/");
+  };
 
   const SurveyExtraForms = () => {
     return (
@@ -111,7 +147,7 @@ const PostingPage = () => {
               onClick={() => setIsSurveySelectOpen((c) => !c)}
               className="w-full h-full text-sm flex justify-between items-center"
             >
-              설문지를 선택해주세요.
+              {surveyForm || "설문지를 선택해주세요."}
               <svg
                 width="12"
                 height="12"
@@ -131,14 +167,17 @@ const PostingPage = () => {
                 isSurveySelectOpen ? "flex" : "hidden"
               } flex-col absolute left-0 top-10 w-full h-auto py-2 rounded-md border `}
             >
-              {test.map((v) => (
-                <React.Fragment key={v}>
+              {mySurveyForm.map((surveyForm) => (
+                <React.Fragment key={surveyForm.id}>
                   <li
                     className="optionItem p-2 hover:cursor-pointer hover:bg-proj-color"
                     role="presentation"
-                    onClick={() => console.log(v)}
+                    onClick={() => {
+                      setSurveyForm(surveyForm.id);
+                      setIsSurveySelectOpen(false);
+                    }}
                   >
-                    <button onClick={() => console.log(v)}>{v}</button>
+                    {surveyForm.survey_name}
                   </li>
                 </React.Fragment>
               ))}
@@ -177,40 +216,45 @@ const PostingPage = () => {
             >
               설문
             </button>
-
-            {/*  */}
-            <button
-              onClick={async () => await uploadImage({ fileName: "test1", imageFile: selectedFile })}
-              className={`w-32 h-8 ml-3 border rounded-md border-red-400 hover:border-proj-color`}
-            >
-              이미지 확인
-            </button>
-            <button
-              onClick={() =>
-                console.log(`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/${"test"}`)
-              }
-            >
-              asdsa
-            </button>
           </div>
         </article>
 
         <article className="w-full h-auto bt-2 mb-4 flex flex-col">
           <strong className="font-bold text-sm">제목</strong>
-          <input className="w-[60%] h-8 mt-2 px-5 rounded-md border border-[#EEEEEE]" />
+          <input
+            value={title}
+            placeholder="제목"
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-[60%] h-auto mt-2 px-5 py-2 rounded-md border border-[#EEEEEE]"
+          />
         </article>
 
         <article className="w-full h-auto bt-2 mb-4 flex flex-col">
           <strong className="font-bold text-sm">내용</strong>
-          <textarea className="w-[60%] h-64 mt-2 px-5 resize-none rounded-md border border-[#EEEEEE]" />
+          <textarea
+            value={content}
+            placeholder="제목"
+            onChange={(e) => setContent(e.target.value)}
+            className="w-[60%] h-64 mt-2 px-5 py-4 resize-none rounded-md border border-[#EEEEEE]"
+          />
         </article>
 
         {/* 설문 타입일 때만 렌더링 */}
         {currentType === "survey" && <SurveyExtraForms />}
 
         <div className="pt-10 flex justify-end items-center gap-3">
-          <button className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]">뒤로가기</button>
-          <button className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-proj-color">등록하기</button>
+          <button
+            onClick={() => navigate("/")}
+            className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]"
+          >
+            뒤로가기
+          </button>
+          <button
+            onClick={onClickPosting}
+            className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-proj-color"
+          >
+            등록하기
+          </button>
         </div>
       </section>
     </div>

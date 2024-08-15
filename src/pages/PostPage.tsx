@@ -7,7 +7,7 @@ import WriteComment from "@/components/post/WriteComment";
 import NormalTypePost from "@/components/post/NormalTypePost";
 import SurveyTypePost from "@/components/post/SurveyTypePost";
 import PostComment from "@/components/post/PostComment";
-import { getPostById } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { UUID } from "crypto";
 
 type PostType = {
@@ -27,17 +27,35 @@ type PostType = {
     commenter_id: UUID;
     commenter_name: string;
   }[];
+  updated_at: string;
 };
 
 const PostPage = () => {
-  const postID = useLocation().pathname.split("/post/").at(-1);
-
+  const postID = useLocation().pathname.split("/post/").at(-1) as UUID;
   const [post, setPost] = useState<PostType | null>(null);
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState<
+    {
+      comment: string;
+      avatar_url: string;
+      comment_id: UUID;
+      updated_at: string;
+      commenter_id: UUID;
+      commenter_name: string;
+    }[]
+  >([
+    {
+      comment: "",
+      avatar_url: "",
+      comment_id: "0-0-0-0-0-0",
+      updated_at: "",
+      commenter_id: "0-0-0-0-0-0",
+      commenter_name: "",
+    },
+  ]);
 
   useEffect(() => {
     (async function name() {
-      const result = await getPostById(postID);
+      const result = await api.post.getPostById(postID);
       if (result) {
         const data = result[0];
         console.log("p: ", data);

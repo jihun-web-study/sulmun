@@ -1,6 +1,6 @@
 import { userInfoAtom } from "@/store/userStore";
 import { useAtomValue } from "jotai";
-import { auth } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 
 const AsideUserInfo = () => {
   const userInfo = useAtomValue(userInfoAtom);
@@ -12,7 +12,7 @@ const AsideUserInfo = () => {
         <span>
           <strong>{userInfo?.user_name}</strong>님
         </span>
-        <button onClick={auth.signOut} className="font-normal underline decoration-[1px] underline-offset-[3px]">
+        <button onClick={api.auth.signOut} className="font-normal underline decoration-[1px] underline-offset-[3px]">
           로그아웃
         </button>
       </div>

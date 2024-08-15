@@ -1,5 +1,5 @@
 import DropDown from "@/components/auth/common/DropDown";
-import { auth } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { useNavigate } from "react-router-dom";
 
 type SignInBoxProps = {
@@ -13,7 +13,7 @@ const SignInBox = ({ avartarUrl, userName }: SignInBoxProps) => {
   const buttonList = [
     { text: "마이페이지", onclick: () => navigate("/mypage") },
     { text: "계정 설정", onclick: () => navigate("/setting") },
-    { text: "로그아웃", onclick: auth.signOut },
+    { text: "로그아웃", onclick: api.auth.signOut },
   ];
 
   return (

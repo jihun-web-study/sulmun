@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getFilteredPostsByRange } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 
 const useGetPostByFilter = ({
   filterType,
@@ -14,7 +14,7 @@ const useGetPostByFilter = ({
   const { data: allPosts } = useQuery({
     queryKey: ["allPosts", filterType, pageNumber, pageSize],
     queryFn: async () => {
-      const posts = await getFilteredPostsByRange({ filterType, pageNumber, pageSize });
+      const posts = await api.post.getFilteredPostsByRange({ filterType, pageNumber, pageSize });
 
       return posts;
     },

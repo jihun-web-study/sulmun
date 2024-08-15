@@ -1,4 +1,4 @@
-import { getMyQuestionForm } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { useEffect, useState } from "react";
 
 type QuestionForm = { id: number; survey_name: string } | null;
@@ -9,7 +9,7 @@ const MainTemplateButton = ({ surveyForm }: { surveyForm: QuestionForm }) => {
   useEffect(() => {
     if (surveyForm) {
       (async function getQuestionForm() {
-        const questionForm = await getMyQuestionForm(surveyForm.id);
+        const questionForm = await api.survey.getMyQuestionForm(surveyForm.id);
         console.log(surveyForm.id, questionForm);
         setMyQuestionForm(questionForm);
       })();
