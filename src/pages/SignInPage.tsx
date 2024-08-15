@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "@/components/auth/common/Input";
 import SocialLoginbutton from "@/components/auth/signin/SocialLoginbutton";
-import { signInWithEmail, signInWithOAuth } from "@/supabase/utils";
+import { auth } from "@/supabase/utils";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -15,27 +15,15 @@ const SignInPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log("submit!");
-          signInWithEmail({ email, password });
+          auth.signInWithEmail({ email, password });
         }}
       >
         <div className="flex gap-4">
           <div className="flex-grow flex flex-col gap-2">
-            <Input
-              type="text"
-              placeholder="아이디"
-              value={email}
-              onChange={setEmail}
-            />
-            <Input
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={setPassword}
-            />
+            <Input type="text" placeholder="아이디" value={email} onChange={setEmail} />
+            <Input type="password" placeholder="비밀번호" value={password} onChange={setPassword} />
           </div>
-          <button className="w-24 text-white rounded bg-proj-bg-linear">
-            로그인
-          </button>
+          <button className="w-24 text-white rounded bg-proj-bg-linear">로그인</button>
         </div>
       </form>
 
@@ -51,18 +39,9 @@ const SignInPage = () => {
       <div className="flex flex-col items-center">
         <strong className="mb-4">소셜 계정으로 로그인하기</strong>
         <div className="flex gap-3">
-          <SocialLoginbutton
-            socialType={"kakao"}
-            onClick={signInWithOAuth("kakao")}
-          />
-          <SocialLoginbutton
-            socialType={"google"}
-            onClick={() => alert("구글 로그인은 아직 미구현입니다.")}
-          />
-          <SocialLoginbutton
-            socialType={"github"}
-            onClick={signInWithOAuth("github")}
-          />
+          <SocialLoginbutton socialType={"kakao"} onClick={auth.signInWithOAuth("kakao")} />
+          <SocialLoginbutton socialType={"google"} onClick={() => alert("구글 로그인은 아직 미구현입니다.")} />
+          <SocialLoginbutton socialType={"github"} onClick={auth.signInWithOAuth("github")} />
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "@/components/auth/common/Input";
-import { signUpWithEmail } from "@/supabase/utils";
+import { auth } from "@/supabase/utils";
 import { useNavigate } from "react-router-dom";
 
 const SignUpInfo = () => {
@@ -26,43 +26,20 @@ const SignUpInfo = () => {
         } else {
           console.log("submit!");
           console.table({ nickname, email, password });
-          const result = await signUpWithEmail({ nickname, email, password });
+          const result = await auth.signUpWithEmail({ nickname, email, password });
           if (!result) {
             navigate("/auth/signup/verify", { state: { nickname, email } });
           }
         }
       }}
     >
-      <Input
-        type="text"
-        placeholder="닉네임"
-        value={nickname}
-        onChange={setNickname}
-      />
+      <Input type="text" placeholder="닉네임" value={nickname} onChange={setNickname} />
 
-      <Input
-        type="text"
-        placeholder="이메일"
-        value={email}
-        onChange={setEmail}
-      />
+      <Input type="text" placeholder="이메일" value={email} onChange={setEmail} />
 
-      <Input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={setPassword}
-      />
-      <Input
-        type="password"
-        placeholder="비밀번호 확인"
-        value={confirmPassword}
-        onChange={setConfirmPassword}
-      />
-      <button
-        type="submit"
-        className="w-full py-5 text-white rounded-[10px] bg-proj-bg-linear"
-      >
+      <Input type="password" placeholder="비밀번호" value={password} onChange={setPassword} />
+      <Input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={setConfirmPassword} />
+      <button type="submit" className="w-full py-5 text-white rounded-[10px] bg-proj-bg-linear">
         회원가입하기
       </button>
     </form>
