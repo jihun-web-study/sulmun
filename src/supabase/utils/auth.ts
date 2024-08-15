@@ -133,7 +133,7 @@ export async function deleteAccount() {
   location.href = "/";
 }
 
-export async function updateUserInfo(username) {
+export async function updateUserInfo(username: string) {
   try {
     const { data: updateData, error: updateError } = await supabase.auth.updateUser({ data: { user_name: username } });
 
