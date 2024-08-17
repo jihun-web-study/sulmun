@@ -5,14 +5,24 @@ import Input from "@/components/auth/common/Input";
 import useTemplateLogics from "@/components/survey/useTemplateLogics";
 import TemplateTypeBox from "@/components/survey/TemplateTypeBox";
 import { ListItem } from "@/components/survey/useTemplateLogics";
+import { api } from "@/supabase/utils";
 
 const SurveyTemplatePage = () => {
   const id = Number(useLocation().pathname.split("template/").at(-1));
   const [mode, setMode] = useState<"create" | "alter" | null>(null);
   const [surveyTitle, setSurveyTitle] = useState("");
 
-  const { items, setItems, addItem, updateItemTitle, deleteItem, toggleMode, addOption, updateOption, deleteOption } =
-    useTemplateLogics();
+  const {
+    questions,
+    setQuestions,
+    addItem,
+    updateItemTitle,
+    deleteItem,
+    toggleMode,
+    addOption,
+    updateOption,
+    deleteOption,
+  } = useTemplateLogics();
 
   useEffect(() => {
     if (typeof id === "number" && id > 0) setMode("alter");
@@ -28,8 +38,8 @@ const SurveyTemplatePage = () => {
       { id: 4, title: "4", type: "essay", options: [{ option_number: 1, option: "1" }] },
     ];
 
-    if (mode === "alter") setItems(dummyFetchData);
-  }, [mode, setItems]);
+    if (mode === "alter") setQuestions(dummyFetchData);
+  }, [mode, setQuestions]);
 
   return (
     <div className="w-full h-auto">
@@ -45,12 +55,15 @@ const SurveyTemplatePage = () => {
         />
 
         {/* test */}
-        <button onClick={() => console.table(items)} className="mb-4 w-full font-bold">
+        <button
+          onClick={() => console.table(Boolean(questions.length !== 0), questions)}
+          className="mb-4 w-full font-bold"
+        >
           items 확인
         </button>
         {/* test */}
 
-        {items.map((item) => (
+        {questions.map((item) => (
           <TemplateTypeBox
             key={item.id}
             item={item}
@@ -69,7 +82,21 @@ const SurveyTemplatePage = () => {
 
         <div className="w-full mt-10 flex justify-end gap-3 text-white">
           <button className="px-10 py-2 bg-[#D8D8D8] font-bold rounded-md">뒤로가기</button>
-          <button className="px-10 py-2 bg-proj-sub-color font-bold rounded-md">등록하기</button>
+          <button
+            className="px-10 py-2 bg-proj-sub-color font-bold rounded-md"
+            onClick={async () => {
+              if (questions.length === 0 || surveyTitle === "") {
+                alert("설문지 템플릿 제출 불가!");
+              } else {
+                const result = await api.survey.createSurveyWithQuestions({
+                  surveyName: surveyTitle,
+                  questions: questions,
+                });
+              }
+            }}
+          >
+            등록하기
+          </button>
         </div>
       </div>
     </div>

@@ -13,27 +13,27 @@ export interface ListItem {
 }
 
 const useTemplateLogics = () => {
-  const [items, setItems] = useState<ListItem[]>([]);
+  const [questions, setQuestions] = useState<ListItem[]>([]);
   const [nextItemId, setNextItemId] = useState(1);
 
   const addItem = () => {
-    setItems([...items, { id: nextItemId, title: "", type: "essay", options: [] }]);
+    setQuestions([...questions, { id: nextItemId, title: "", type: "essay", options: [] }]);
     setNextItemId(nextItemId + 1);
   };
 
   const updateItemTitle = (id: number, title: string) => {
-    setItems(items.map((item) => (item.id === id ? { ...item, title } : item)));
+    setQuestions(questions.map((item) => (item.id === id ? { ...item, title } : item)));
   };
 
   const deleteItem = (id: number) => {
-    const newItems = items.filter((item) => item.id !== id);
-    setItems(newItems.map((item, index) => ({ ...item, id: index + 1 }))); // itemId 재정렬
+    const newItems = questions.filter((item) => item.id !== id);
+    setQuestions(newItems.map((item, index) => ({ ...item, id: index + 1 }))); // itemId 재정렬
     setNextItemId(newItems.length + 1);
   };
 
   const toggleMode = (id: number) => {
-    setItems(
-      items.map((item) => {
+    setQuestions(
+      questions.map((item) => {
         if (item.id === id) {
           const newType = item.type === "essay" ? "choice" : "essay";
           return {
@@ -48,8 +48,8 @@ const useTemplateLogics = () => {
   };
 
   const addOption = (itemId: number) => {
-    setItems(
-      items.map((item) => {
+    setQuestions(
+      questions.map((item) => {
         if (item.id === itemId) {
           const nextOptionId = item.options.length > 0 ? Math.max(...item.options.map((o) => o.option_number)) + 1 : 1;
           return {
@@ -63,8 +63,8 @@ const useTemplateLogics = () => {
   };
 
   const updateOption = (itemId: number, optionId: number, value: string) => {
-    setItems(
-      items.map((item) => {
+    setQuestions(
+      questions.map((item) => {
         if (item.id === itemId) {
           return {
             ...item,
@@ -77,8 +77,8 @@ const useTemplateLogics = () => {
   };
 
   const deleteOption = (itemId: number, optionNumber: number) => {
-    setItems(
-      items.map((item) => {
+    setQuestions(
+      questions.map((item) => {
         if (item.id === itemId) {
           const newOptions = item.options
             .filter((opt) => opt.option_number !== optionNumber)
@@ -92,7 +92,17 @@ const useTemplateLogics = () => {
       })
     );
   };
-  return { items, setItems, addItem, updateItemTitle, deleteItem, toggleMode, addOption, updateOption, deleteOption };
+  return {
+    questions,
+    setQuestions,
+    addItem,
+    updateItemTitle,
+    deleteItem,
+    toggleMode,
+    addOption,
+    updateOption,
+    deleteOption,
+  };
 };
 
 export default useTemplateLogics;
