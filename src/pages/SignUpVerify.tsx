@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "@/components/auth/common/Input";
-import { auth } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { useLocation } from "react-router-dom";
 
 const SignUpVerify = () => {
@@ -22,7 +22,7 @@ const SignUpVerify = () => {
             token,
           });
           if (token !== "" && token.length === 6) {
-            auth.verifySignUp({ email: state.email, token });
+            api.auth.verifySignUp({ email: state.email, token });
           }
         }
       }}

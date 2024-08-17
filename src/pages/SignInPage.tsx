@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "@/components/auth/common/Input";
 import SocialLoginbutton from "@/components/auth/signin/SocialLoginbutton";
-import { auth } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ const SignInPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log("submit!");
-          auth.signInWithEmail({ email, password });
+          api.auth.signInWithEmail({ email, password });
         }}
       >
         <div className="flex gap-4">
@@ -39,9 +39,9 @@ const SignInPage = () => {
       <div className="flex flex-col items-center">
         <strong className="mb-4">소셜 계정으로 로그인하기</strong>
         <div className="flex gap-3">
-          <SocialLoginbutton socialType={"kakao"} onClick={auth.signInWithOAuth("kakao")} />
+          <SocialLoginbutton socialType={"kakao"} onClick={api.auth.signInWithOAuth("kakao")} />
           <SocialLoginbutton socialType={"google"} onClick={() => alert("구글 로그인은 아직 미구현입니다.")} />
-          <SocialLoginbutton socialType={"github"} onClick={auth.signInWithOAuth("github")} />
+          <SocialLoginbutton socialType={"github"} onClick={api.auth.signInWithOAuth("github")} />
         </div>
       </div>
     </>

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMySurveyForm } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 
 const useGetSurveyForm = () => {
   const { data: surveyFormData } = useQuery({
     queryKey: ["surveyFormData"],
     queryFn: async () => {
-      const surveyFormData = await getMySurveyForm();
+      const surveyFormData = await api.survey.getMySurveyForm();
 
       return surveyFormData;
     },

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "@/components/auth/common/Input";
-import { auth } from "@/supabase/utils";
+import { api } from "@/supabase/utils";
 import { useNavigate } from "react-router-dom";
 
 const SignUpInfo = () => {
@@ -26,7 +26,7 @@ const SignUpInfo = () => {
         } else {
           console.log("submit!");
           console.table({ nickname, email, password });
-          const result = await auth.signUpWithEmail({ nickname, email, password });
+          const result = await api.auth.signUpWithEmail({ nickname, email, password });
           if (!result) {
             navigate("/auth/signup/verify", { state: { nickname, email } });
           }
