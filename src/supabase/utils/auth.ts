@@ -1,40 +1,6 @@
 import supabase from "@/supabase/initial";
 import { Provider } from "@supabase/supabase-js";
 
-export async function signInWithEmail({ email, password }: { email: string; password: string }) {
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  });
-
-  // 로그인 성공 시 메인페이지로 이동, 임시로 location 객체 사용
-  if (!error) location.href = "/";
-  else console.log(error.message);
-}
-
-//
-export function signInWithOAuth(provider: Provider) {
-  return async function () {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: provider,
-      options: {
-        redirectTo: "http://localhost:3000/auth/oauth",
-      },
-    });
-
-    return { data, error };
-  };
-}
-
-export async function checkLogin() {
-  const authInfo = await supabase.auth.getSession();
-  const session = authInfo.data.session;
-
-  console.table({ authInfo, session });
-
-  return session;
-}
-
 export async function signUpWithEmail({
   email,
   password,
@@ -83,21 +49,6 @@ export async function verifySignUp({ email, token }: { email: string; token: str
   location.href = "/";
 }
 
-export async function getUser() {
-  const { data, error } = await supabase.auth.getUser();
-
-  return { data, error };
-}
-
-export async function getSession() {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  console.log("session: ", session);
-
-  return session;
-}
-
 export async function resendOTP(email: string) {
   const { error } = await supabase.auth.resend({
     type: "signup",
@@ -110,27 +61,69 @@ export async function resendOTP(email: string) {
   if (error) console.log(error);
 }
 
+export async function signInWithEmail({ email, password }: { email: string; password: string }) {
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
+
+  // 로그인 성공 시 메인페이지로 이동, 임시로 location 객체 사용
+  if (!error) location.href = "/";
+  else console.log(error.message);
+}
+
+//
+export function signInWithOAuth(provider: Provider) {
+  return async function () {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: "http://localhost:3000/auth/oauth",
+      },
+    });
+
+    return { data, error };
+  };
+}
+
+export async function checkLogin() {
+  const authInfo = await supabase.auth.getSession();
+  const session = authInfo.data.session;
+
+  console.table({ authInfo, session });
+
+  return session;
+}
+
+export async function getSession() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  console.log("session: ", session);
+
+  return session;
+}
+
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
 
-  if (!error) return (location.href = "/");
+  if (!error) location.href = "/";
 
   return error;
 }
 
-export async function deleteAccount() {
-  const { data, error } = await supabase.rpc("delete_account");
+export async function getUser() {
+  const { data, error } = await supabase.auth.getUser();
 
-  console.log(data, error);
+  return { data, error };
+}
 
-  if (error) {
-    console.error("Error deleting user:", error);
-    return;
-  }
+export async function getUserId() {
+  const { data, error: getUserError } = await supabase.auth.getUser();
 
-  console.log("User account deleted successfully:", data);
-  localStorage.removeItem("sulmun_auth_key");
-  location.href = "/";
+  if (getUserError) throw getUserError;
+
+  return data.user.id;
 }
 
 export async function updateUserInfo(username: string) {
@@ -147,10 +140,17 @@ export async function updateUserInfo(username: string) {
   }
 }
 
-export async function getUserId() {
-  const { data, error: getUserError } = await supabase.auth.getUser();
+export async function deleteAccount() {
+  const { data, error } = await supabase.rpc("delete_account");
 
-  if (getUserError) throw getUserError;
+  console.log(data, error);
 
-  return data.user.id;
+  if (error) {
+    console.error("Error deleting user:", error);
+    return;
+  }
+
+  console.log("User account deleted successfully:", data);
+  localStorage.removeItem("sulmun_auth_key");
+  location.href = "/";
 }
