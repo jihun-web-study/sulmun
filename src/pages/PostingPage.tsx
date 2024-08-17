@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/supabase/utils";
+import useGetSurveyForm from "@/store/useGetSurveyForm";
 
 const PostingPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const PostingPage = () => {
   // 업로드한 이미지 미리보기
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const [mySurveyForm, setMySurveyForm] = useState<any>(null);
+  const { surveyFormData } = useGetSurveyForm();
 
   const handleButtonClick = () => {
     // file input 요소를 클릭하여 파일 선택 다이얼로그 열기
@@ -52,13 +53,6 @@ const PostingPage = () => {
       }
     };
   }, [previewUrl]);
-
-  useEffect(() => {
-    (async function () {
-      const result = await api.survey.getMySurveyForm();
-      setMySurveyForm(result);
-    })();
-  }, []);
 
   function generateRandomFileName() {
     let result = "";
@@ -167,7 +161,7 @@ const PostingPage = () => {
                 isSurveySelectOpen ? "flex" : "hidden"
               } flex-col absolute left-0 top-10 w-full h-auto py-2 rounded-md border `}
             >
-              {mySurveyForm.map((surveyForm) => (
+              {surveyFormData?.map((surveyForm) => (
                 <React.Fragment key={surveyForm.id}>
                   <li
                     className="optionItem p-2 hover:cursor-pointer hover:bg-proj-color"
@@ -243,6 +237,12 @@ const PostingPage = () => {
         {currentType === "survey" && <SurveyExtraForms />}
 
         <div className="pt-10 flex justify-end items-center gap-3">
+          <button
+            onClick={() => console.log(surveyFormData)}
+            className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]"
+          >
+            뒤로가기
+          </button>
           <button
             onClick={() => navigate("/")}
             className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]"
