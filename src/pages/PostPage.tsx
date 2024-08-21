@@ -28,6 +28,8 @@ type PostType = {
     commenter_name: string;
   }[];
   updated_at: string;
+  already_responsed: boolean;
+  survey_id: number | null;
 };
 
 const PostPage = () => {
@@ -55,7 +57,8 @@ const PostPage = () => {
 
   useEffect(() => {
     (async function name() {
-      const result = await api.post.getPostById(postID);
+      const result = await api.post.getPostByIdWithSurvey(postID);
+
       if (result) {
         const data = result[0];
         console.log("p: ", data);
@@ -81,7 +84,14 @@ const PostPage = () => {
             {post && post.post_type === "normal" ? (
               <NormalTypePost title={post.title} content={post.content} comments={comments} />
             ) : (
-              <SurveyTypePost image={post.post_image} title={post.title} content={post.content} comments={comments} />
+              <SurveyTypePost
+                image={post.post_image}
+                title={post.title}
+                content={post.content}
+                alreadyResponsed={post.already_responsed}
+                surveyId={post.survey_id}
+                comments={comments}
+              />
             )}
 
             {/* 댓글 작성 */}

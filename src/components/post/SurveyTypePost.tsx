@@ -13,12 +13,12 @@ type SurveyTypePostProps = {
     commenter_id: UUID;
     commenter_name: string;
   }[];
+  alreadyResponsed: boolean;
+  surveyId: number | null;
 };
 
-const SurveyTypePost = ({ title, content, image, comments }: SurveyTypePostProps) => {
+const SurveyTypePost = ({ title, content, image, comments, alreadyResponsed, surveyId }: SurveyTypePostProps) => {
   const backgroundImageStyle = image ? { backgroundImage: `url('${image}')` } : undefined;
-
-  const tempSurveyID = 1;
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -28,8 +28,10 @@ const SurveyTypePost = ({ title, content, image, comments }: SurveyTypePostProps
         <div className="font-semibold text-lg mb-1">{title}</div>
         <div className="font-semibold text-sm">{content}</div>
         <Link
-          to={`/survey/${tempSurveyID}`}
-          className="w-32 h-8 my-4 flex justify-center items-center rounded-md text-white bg-proj-bg-linear text-sm"
+          to={`/survey/${surveyId}`}
+          className={`w-32 h-8 my-4 flex justify-center items-center rounded-md text-white text-sm hover:text-white ${
+            alreadyResponsed ? "bg-[#D0D0D0]" : "bg-proj-bg-linear"
+          }`}
         >
           설문지 작성하기
         </Link>

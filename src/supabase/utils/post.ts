@@ -46,6 +46,7 @@ export async function getFilteredPostsByRange({ filterType, pageNumber, pageSize
   }
 }
 
+// 특정 포스트 가져오기 // 설문지 안가져옴
 export async function getPostById(postId) {
   try {
     const { data, error } = await supabase.rpc("get_post_by_post_id", { post_id: postId });
@@ -58,8 +59,20 @@ export async function getPostById(postId) {
   }
 }
 
-/* COMMENT FUNCTIONS */
+// 특정 포스트 가져오기 // 설문지 가져옴
+export async function getPostByIdWithSurvey(postId) {
+  try {
+    const { data, error } = await supabase.rpc("get_post_by_id_with_survey", { post_id: postId });
 
+    if (error) throw error;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/* COMMENT FUNCTIONS */
 export async function addComment({ postId, comment }: { postId: UUID; comment: string }) {
   try {
     //const post_id = "4f5283c9-0c07-4889-b124-a7571a9adb9c";
@@ -109,7 +122,10 @@ export type PostingTypes = {
   content: string;
   postType: "normal" | "survey";
   postImage: string | null;
+  surveyId?: number;
 };
+
+type test = Pick<PostingTypes, "title" | "content">;
 
 // rpc 포스팅
 export async function posting_rpc({ postType, title, content, postImage }: PostingTypes) {
@@ -140,9 +156,32 @@ export async function posting({ postType, title, content, postImage }: PostingTy
       .insert({ post_type: postType, title, content, user_id: id, post_image: postImage })
       .select();
 
+    console.log("success", postData);
+
     if (error) throw error;
 
     return postData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 설문지 타입과 함께
+export async function postingWithSurvey({ postType, title, content, postImage, surveyId }: PostingTypes) {
+  try {
+    const { data, error } = await supabase.rpc("create_post_with_survey", {
+      post_type: postType,
+      title: title,
+      content: content,
+      post_image: postImage,
+      input_survey_id: surveyId,
+    });
+
+    if (error) throw error;
+
+    console.log("포스팅 성공!");
+    console.log(data);
+    return true;
   } catch (error) {
     console.log(error);
   }
