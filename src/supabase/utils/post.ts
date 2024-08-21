@@ -111,7 +111,7 @@ export async function uploadImage({ fileName, imageFile }: { fileName: string; i
       data: { publicUrl },
     } = supabase.storage.from("images").getPublicUrl(fileName);
 
-    return { data, publicUrl };
+    return { publicUrl };
   } catch (error) {
     console.error("Error uploading image: ", error.message);
   }
@@ -147,13 +147,13 @@ export async function posting_rpc({ postType, title, content, postImage }: Posti
 }
 
 // 포스팅 2
-export async function posting({ postType, title, content, postImage }: PostingTypes) {
+export async function postingNormal({ postType, title, content, postImage }: PostingTypes) {
   try {
     const id = await api.auth.getUserId();
 
     const { data: postData, error } = await supabase
       .from("post")
-      .insert({ post_type: postType, title, content, user_id: id, post_image: postImage })
+      .insert({ post_type: postType, title, content, user_id: id })
       .select();
 
     console.log("success", postData);

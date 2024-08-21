@@ -10,7 +10,13 @@ const PostingPage = () => {
   const [currentType, setCurrentType] = useState<"normal" | "survey">("normal");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [surveyForm, setSurveyForm] = useState(Number);
+  const [surveyForm, setSurveyForm] = useState<{
+    created_at: string | null;
+    id: number;
+    survey_name: string;
+    updated_at: string | null;
+    user_id: string | null;
+  } | null>(null);
   const [isSurveySelectOpen, setIsSurveySelectOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -67,8 +73,6 @@ const PostingPage = () => {
   }
 
   const onClickPosting = async () => {
-    let post: PostingTypes = { title: "", content: "", postType: "normal", postImage: "" };
-
     if (currentType === "survey") {
       if (!selectedFile || !surveyForm) {
         alert("이미지또는 설문지를 추가해주세요.");
@@ -77,24 +81,25 @@ const PostingPage = () => {
 
         const randomFileName = generateRandomFileName();
 
-        const { data, publicUrl } = await api.post.uploadImage({
+        const { publicUrl } = await api.post.uploadImage({
           fileName: `${randomFileName}`,
           imageFile: selectedFile,
         });
 
-        const result = await api.post.posting({ postType: "survey", title, content, postImage: publicUrl });
+        const result = await api.post.postingWithSurvey({
+          postType: "survey",
+          title,
+          content,
+          postImage: publicUrl,
+          surveyId: surveyForm.id, // TODO: 여기 해야함
+        });
 
         if (!result) return new Error("포스팅 실패!");
-
-        console.log("post_id: ", result[0].id);
       }
     } else {
-      post = { postType: "normal", title, content, postImage: null };
+      const result = await api.post.postingNormal({ postType: "normal", title, content, postImage: null });
+      if (!result) return new Error("포스팅 실패!");
     }
-
-    const result = await api.post.posting(post);
-
-    if (!result) return new Error("포스팅 실패!");
 
     navigate("/");
   };
@@ -141,7 +146,7 @@ const PostingPage = () => {
               onClick={() => setIsSurveySelectOpen((c) => !c)}
               className="w-full h-full text-sm flex justify-between items-center"
             >
-              {surveyForm || "설문지를 선택해주세요."}
+              {surveyForm?.survey_name || "설문지를 선택해주세요."}
               <svg
                 width="12"
                 height="12"
@@ -167,7 +172,7 @@ const PostingPage = () => {
                     className="optionItem p-2 hover:cursor-pointer hover:bg-proj-color"
                     role="presentation"
                     onClick={() => {
-                      setSurveyForm(surveyForm.id);
+                      setSurveyForm(surveyForm);
                       setIsSurveySelectOpen(false);
                     }}
                   >
@@ -237,12 +242,6 @@ const PostingPage = () => {
         {currentType === "survey" && <SurveyExtraForms />}
 
         <div className="pt-10 flex justify-end items-center gap-3">
-          <button
-            onClick={() => console.log(surveyFormData)}
-            className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]"
-          >
-            뒤로가기
-          </button>
           <button
             onClick={() => navigate("/")}
             className="w-32 h-8 border rounded-md text-white text-xs font-bold bg-[#DBDBDB]"
