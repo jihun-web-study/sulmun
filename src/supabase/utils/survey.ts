@@ -48,3 +48,16 @@ export async function createSurveyWithQuestions({ surveyName, questions }: { sur
     console.log(error);
   }
 }
+
+export async function getSurveyById(surveyId: number) {
+  try {
+    const { data, error } = await supabase.rpc("get_survey_by_id", { survey_id: surveyId });
+
+    if (error) throw error;
+
+    console.log(data);
+    return data[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
