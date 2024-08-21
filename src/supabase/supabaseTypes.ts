@@ -140,7 +140,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string | null;
-          id: number;
+          id?: number;
           question_options?: Json | null;
           question_title: string;
           question_type?: Database["public"]["Enums"]["question_type"] | null;
@@ -174,24 +174,27 @@ export type Database = {
           created_at: string | null;
           id: number;
           question_id: number | null;
+          respondent_id: string | null;
+          survey_post_id: number | null;
           updated_at: string | null;
-          user_id: string | null;
         };
         Insert: {
           answer: string;
           created_at?: string | null;
-          id: number;
+          id?: never;
           question_id?: number | null;
+          respondent_id?: string | null;
+          survey_post_id?: number | null;
           updated_at?: string | null;
-          user_id?: string | null;
         };
         Update: {
           answer?: string;
           created_at?: string | null;
-          id?: number;
+          id?: never;
           question_id?: number | null;
+          respondent_id?: string | null;
+          survey_post_id?: number | null;
           updated_at?: string | null;
-          user_id?: string | null;
         };
         Relationships: [
           {
@@ -202,34 +205,20 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "response_user_id_fkey";
-            columns: ["user_id"];
+            foreignKeyName: "response_respondent_id_fkey";
+            columns: ["respondent_id"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "response_survey_post_id_fkey";
+            columns: ["survey_post_id"];
+            isOneToOne: false;
+            referencedRelation: "survey_post";
+            referencedColumns: ["id"];
           }
         ];
-      };
-      studywithoutrls: {
-        Row: {
-          body: string | null;
-          created_at: string;
-          id: number;
-          title: string | null;
-        };
-        Insert: {
-          body?: string | null;
-          created_at?: string;
-          id?: number;
-          title?: string | null;
-        };
-        Update: {
-          body?: string | null;
-          created_at?: string;
-          id?: number;
-          title?: string | null;
-        };
-        Relationships: [];
       };
       survey_form: {
         Row: {
@@ -273,7 +262,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string | null;
-          id: number;
+          id?: number;
           post_id?: string | null;
           survey_name: string;
           updated_at?: string | null;
@@ -291,6 +280,32 @@ export type Database = {
             columns: ["post_id"];
             isOneToOne: false;
             referencedRelation: "post";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      test: {
+        Row: {
+          id: string;
+          name: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          id: string;
+          name?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          id?: string;
+          name?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "test_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           }
         ];
@@ -364,8 +379,24 @@ export type Database = {
           updated_at: string;
         }[];
       };
+      create_post_with_survey: {
+        Args: {
+          post_type: Database["public"]["Enums"]["survey_type"];
+          title: string;
+          content: string;
+          post_image: string;
+          input_survey_id: number;
+        };
+        Returns: string;
+      };
       delete_account: {
         Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+      delete_comment: {
+        Args: {
+          comment_id: number;
+        };
         Returns: undefined;
       };
       get_filtered_posts_by_limit: {
@@ -374,18 +405,26 @@ export type Database = {
           page_number: number;
           page_size: number;
         };
+        Returns: Json;
+      };
+      get_post_by_id_with_survey: {
+        Args: {
+          post_id: string;
+        };
         Returns: {
           id: string;
-          user_id: string;
           post_type: Database["public"]["Enums"]["survey_type"];
           title: string;
           content: string;
           post_image: string;
-          created_at: string;
-          updated_at: string;
-          comment_count: number;
+          user_id: string;
           user_name: string;
           avatar_url: string;
+          created_at: string;
+          updated_at: string;
+          comments: Json;
+          survey_id: number;
+          already_responsed: boolean;
         }[];
       };
       get_post_by_post_id: {
@@ -406,8 +445,37 @@ export type Database = {
           comments: Json;
         }[];
       };
+      get_post_count: {
+        Args: {
+          type: string;
+        };
+        Returns: number;
+      };
+      get_survey_by_id: {
+        Args: {
+          survey_id: number;
+        };
+        Returns: {
+          survey_title: string;
+          questions: Json;
+        }[];
+      };
+      get_user_surveys: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          id: number;
+          survey_name: string;
+        }[];
+      };
       migrate_user_data: {
         Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+      update_comment: {
+        Args: {
+          comment_id: number;
+          new_comment: string;
+        };
         Returns: undefined;
       };
       update_user_nickname: {
