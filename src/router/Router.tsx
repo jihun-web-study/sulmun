@@ -15,6 +15,7 @@ import PostingPage from "@/pages/PostingPage";
 import SurveyMainPage from "@/pages/SurveyMainPage";
 import SurveyDetailPage from "@/pages/SurveyDetailPage";
 import SurveyTemplatePage from "@/pages/SurveyTemplatePage";
+import UserSurvey from "@/pages/UserSurvey";
 import MyPage from "@/pages/MyPage";
 import SettingPage from "@/pages/SettingPage";
 
@@ -56,7 +57,7 @@ const Router = (): JSX.Element => {
             element={
               <Routes>
                 <Route path="/" element={<SurveyMainPage />} />
-                <Route path=":id" element={<div>id</div>} />
+                <Route path=":id" element={<UserSurvey />} />
                 <Route path="detail/:id" element={<SurveyDetailPage />} />
                 <Route path="template/:id" element={<SurveyTemplatePage />} />
                 <Route path="*" element={<NotFound />} />
