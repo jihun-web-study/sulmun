@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import Input from "@/components/auth/common/Input";
 import SocialLoginbutton from "@/components/auth/signin/SocialLoginbutton";
 import { api } from "@/supabase/utils";
 
 const SignInPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+
+  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value, name },
+    } = event;
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+  };
 
   return (
     <>
@@ -15,13 +20,27 @@ const SignInPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log("submit!");
-          api.auth.signInWithEmail({ email, password });
+          api.auth.signInWithEmail(form);
         }}
       >
         <div className="flex gap-4">
           <div className="flex-grow flex flex-col gap-2">
-            <Input type="text" placeholder="아이디" value={email} onChange={setEmail} />
-            <Input type="password" placeholder="비밀번호" value={password} onChange={setPassword} />
+            <input
+              className="w-full h-[50px] border-solid border-[1px] rounded-lg pl-[16px]"
+              type="text"
+              name="email"
+              placeholder="아이디"
+              value={form.email}
+              onChange={onInputChange}
+            />
+            <input
+              className="w-full h-[50px] border-solid border-[1px] rounded-lg pl-[16px]"
+              type="password"
+              name="password"
+              placeholder="비밀번호"
+              value={form.password}
+              onChange={onInputChange}
+            />
           </div>
           <button className="w-24 text-white rounded bg-proj-bg-linear">로그인</button>
         </div>
