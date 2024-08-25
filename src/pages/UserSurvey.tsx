@@ -11,6 +11,13 @@ export interface IQuestion {
   question_options: { number: number; option: number | string }[];
 }
 
+interface ISurvey {
+  survey_title: string;
+  questions: IQuestion[];
+}
+
+type SurveyResTypes = ISurvey | undefined;
+
 const UserSurvey = () => {
   const surveyId = useParams().id;
 
@@ -18,13 +25,6 @@ const UserSurvey = () => {
   const [questions, setQuestions] = useState<IQuestion[]>([]);
 
   console.log(surveyId);
-
-  interface ISurvey {
-    survey_title: string;
-    questions: IQuestion[];
-  }
-
-  type SurveyResTypes = ISurvey | undefined;
 
   useEffect(() => {
     (async function getSurvey() {
@@ -45,30 +45,6 @@ const UserSurvey = () => {
       <button onClick={() => console.log(questions)}>문제 확인</button>
 
       <ul className="flex flex-col gap-6">
-        {questions.map((question: IQuestion, idx) => (
-          <li key={question.id} className="flex flex-col">
-            <strong>
-              {`${idx + 1})`} {question.question_title}
-            </strong>
-            {question.question_type === "essay" && <EssayBox />}
-            {question.question_type === "choice" && question.question_options?.length !== 0 && (
-              <ChoiceBox question={question} />
-            )}
-          </li>
-        ))}
-
-        {questions.map((question: IQuestion, idx) => (
-          <li key={question.id} className="flex flex-col">
-            <strong>
-              {`${idx + 1})`} {question.question_title}
-            </strong>
-            {question.question_type === "essay" && <EssayBox />}
-            {question.question_type === "choice" && question.question_options?.length !== 0 && (
-              <ChoiceBox question={question} />
-            )}
-          </li>
-        ))}
-
         {questions.map((question: IQuestion, idx) => (
           <li key={question.id} className="flex flex-col">
             <strong>

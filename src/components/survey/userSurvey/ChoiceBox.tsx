@@ -15,6 +15,8 @@ const ChoiceBox = ({ question }: IChoiceBoxProps) => {
   const [selectedValue, setSelectedValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target);
+
     setSelectedValue(event.target.value);
     // onSelect(event.target.value); // 부모에게 선택된 값 전달
   };
@@ -22,16 +24,16 @@ const ChoiceBox = ({ question }: IChoiceBoxProps) => {
   return (
     <div>
       {question.question_options.map((option) => (
-        <div key={option.number}>
+        <div key={option.number} className="flex items-center gap-4">
           <input
             type="radio"
             id={`number-${option.number}`}
             name="number"
-            value={option.number}
-            checked={selectedValue === option.number.toString()}
+            value={option.option}
+            /* checked={selectedValue === option.number.toString()} */
             onChange={handleChange}
           />
-          <label htmlFor={`number-${option.number}`}>{option.number}</label>
+          <label htmlFor={`number-${option.number}`}>{option.option}</label>
         </div>
       ))}
     </div>

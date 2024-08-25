@@ -63,6 +63,7 @@ const SurveyTemplatePage = () => {
         </button>
         {/* test */}
 
+        {/* 함수들은 그냥 자식 컴포넌트 안에 선언으로 변경..? */}
         {questions.map((item) => (
           <TemplateTypeBox
             key={item.id}
