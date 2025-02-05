@@ -3,6 +3,9 @@ import HomePostComponent from "@/components/home/HomePostComponent";
 import useHomePageLogics from "@/hooks/useHomePageLogics";
 import Pagination from "@/components/home/Pagination";
 
+import { formatRelativeTime } from "@/utils/relativeTime";
+import { useEffect } from "react";
+
 const HomePage = () => {
   const {
     currentType,
@@ -20,6 +23,21 @@ const HomePage = () => {
     setCurrentType(type);
     setPageNumber(1);
   };
+
+  useEffect(() => {
+    // 사용 예시:
+    const examples = [
+      new Date(Date.now() - 10 * 1000), // 10초 전
+      new Date(Date.now() - 45 * 60 * 1000), // 45분 전
+      new Date(Date.now() - 5 * 3600 * 1000), // 5시간 전
+      new Date(Date.now() - 2 * 86400 * 1000), // 2일 전
+      new Date(Date.now() + 3 * 86400 * 1000), // 3일 후
+    ];
+
+    examples.forEach((date) => {
+      console.log(formatRelativeTime(date));
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">

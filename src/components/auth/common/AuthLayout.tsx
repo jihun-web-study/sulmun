@@ -8,7 +8,7 @@ const AuthLayout = () => {
 
   return (
     <div className="w-full h-full bg-[#666666] flex justify-center items-center">
-      <div className="w-[50%] max-w-[666px] h-[auto] p-[4%] pt-[6%] bg-white flex flex-col justify-center relative">
+      <div className="w-[50%] max-w-[666px] h-[auto] p-[4%] pt-[6%] bg-white flex flex-col justify-center relative ">
         {lastPathName.includes("signup") && <BackToLogin />}
         <XButton />
         <div className="pt-10 mb-4 proj-color font-bold text-3xl">
